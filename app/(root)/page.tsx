@@ -5,7 +5,7 @@ const RootPage = () => {
   const loginInfo = {
     user: {
       firstName: "Leopold",
-      lastName: ""
+      lastName: "Hsing"
     }
   }
 
