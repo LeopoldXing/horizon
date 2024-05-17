@@ -1,6 +1,7 @@
 declare interface User {
   firstName: string;
   lastName?: string;
+  email?: string;
 }
 
 declare type Account = {
