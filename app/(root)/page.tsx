@@ -1,5 +1,6 @@
 import React from 'react';
 import HeaderBar from "@/components/customered/layout/HeaderBar";
+import RightSideBar from "@/components/customered/layout/RightSideBar";
 
 const RootPage = () => {
   const loginInfo = {
@@ -20,6 +21,8 @@ const RootPage = () => {
                        subText="Access and manage your accounts and transactions efficiently"/>
           </div>
         </div>
+
+        <RightSideBar user={loginInfo.user} bankList={[]} transactionList={[]}/>
       </div>
   );
 };
