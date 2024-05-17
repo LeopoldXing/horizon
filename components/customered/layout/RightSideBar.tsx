@@ -2,6 +2,7 @@ import React from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import BankCard from "@/components/customered/BankCard";
+import {account1, account2} from "@/lib/constants";
 
 type RightSideBarProps = {
   user: User;
@@ -43,9 +44,13 @@ const RightSideBar = ({user, transactionList, bankList}: RightSideBarProps) => {
           {/*  bank list  */}
           {Array.isArray(bankList) && bankList.length > 0 && (
               <div className="relative flex flex-col flex-1 justify-center items-center gap-5">
-                <div className="relative z-10"><BankCard/></div>
+                <div className="relative z-10">
+                  <BankCard key={"1"} userName="Leopold Hsing" account={account1} showBalance={false}/>
+                </div>
                 {bankList[1] && (
-                    <div className="absolute right-0 top-8 z-0 w-[90%]"><BankCard/></div>
+                    <div className="absolute right-0 top-8 z-0 w-[90%]">
+                      <BankCard key={"2"} userName="Leopold Hsing" account={account2} showBalance={false}/>
+                    </div>
                 )}
               </div>
           )}

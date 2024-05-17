@@ -24,7 +24,7 @@ const SideBar = ({user}: SideBarProps) => {
           </Link>
 
           {sidebarLinks.map((link) => {
-            const isActive = currentPath === link.route || currentPath.startsWith(link.route);
+            let isActive = currentPath === link.route || (currentPath === "/" && currentPath.startsWith(link.route));
             return (
                 <Link href={link.route} key={link.label}
                       className={cn("flex gap-3 items-center py-1 md:p-3 2xl:p-4 rounded-lg justify-center xl:justify-start", {"bg-bank-gradient": isActive})}>

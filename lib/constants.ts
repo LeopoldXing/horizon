@@ -135,3 +135,31 @@ export const transactionCategoryStyles = {
     chipBackgroundColor: "bg-inherit",
   },
 };
+
+export const account1 = {
+  id: "1",
+  availableBalance: 1234.56,
+  currentBalance: 1234.56,
+  officialName: "TANZ",
+  mask: "23",
+  institutionId: "23",
+  name: "account 1",
+  type: "debit",
+  subtype: "debit",
+  appwriteItemId: "123",
+  sharableId: "1234"
+}
+
+export const account2 = {
+  id: "2",
+  availableBalance: 546.98,
+  currentBalance: 45.47,
+  officialName: "TANZ1",
+  mask: "76",
+  institutionId: "36",
+  name: "account 2",
+  type: "credit",
+  subtype: "credit",
+  appwriteItemId: "254",
+  sharableId: "25453"
+}
