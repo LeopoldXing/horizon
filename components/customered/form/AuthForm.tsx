@@ -7,14 +7,13 @@ import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {Button} from "@/components/ui/button";
-import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
-} from "@/components/ui/form";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Loader2} from "lucide-react";
+import {signIn, signUp} from "@/lib/actions/user.actions";
 
 const AuthForm = ({type}: { type: string }) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<User>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /*  form schema  */
@@ -31,6 +30,7 @@ const AuthForm = ({type}: { type: string }) => {
     address: type === "sign-in" ? z.string().optional() : z.string().max(50, "address is too long"),
     city: type === "sign-in" ? z.string().optional() : z.string().max(30, "city name is too long"),
     state: type === "sign-in" ? z.string().optional() : z.string().max(2),
+    postal: type === "sign-in" ? z.string().optional() : z.string(),
     dob: type === "sign-in" ? z.string().optional() : z.string(),
     ssn: type === "sign-in" ? z.string().optional() : z.string()
   });
@@ -46,24 +46,43 @@ const AuthForm = ({type}: { type: string }) => {
       address: "",
       city: "",
       state: "",
+      postal: "",
       dob: "",
       ssn: ""
     },
   })
 
   // 2. Define a submit handler.
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
 
     try {
-
+      if (type === "sign-up") {
+        const userData = {
+          firstName: data.firstname!,
+          lastName: data.lastname!,
+          address1: data.address!,
+          city: data.city!,
+          state: data.state!,
+          postalCode: data.postal!,
+          dateOfBirth: data.dob!,
+          ssn: data.ssn!,
+          email: data.email!,
+          password: data.password!
+        }
+        const newUser = await signUp(userData);
+        setUser(newUser);
+      } else if (type === "sign-in") {
+        const response = await signIn({
+          email: data.email,
+          password: data.password
+        })
+      }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     } finally {
       setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   return (
