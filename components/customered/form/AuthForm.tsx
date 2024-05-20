@@ -29,6 +29,7 @@ const AuthForm = ({type}: { type: string }) => {
     firstname: type === "sign-in" ? z.string().optional() : z.string(),
     lastname: type === "sign-in" ? z.string().optional() : z.string(),
     address: type === "sign-in" ? z.string().optional() : z.string().max(50, "address is too long"),
+    city: type === "sign-in" ? z.string().optional() : z.string().max(30, "city name is too long"),
     state: type === "sign-in" ? z.string().optional() : z.string().max(2),
     dob: type === "sign-in" ? z.string().optional() : z.string(),
     ssn: type === "sign-in" ? z.string().optional() : z.string()
@@ -43,6 +44,7 @@ const AuthForm = ({type}: { type: string }) => {
       firstname: "",
       lastname: "",
       address: "",
+      city: "",
       state: "",
       dob: "",
       ssn: ""
@@ -132,6 +134,21 @@ const AuthForm = ({type}: { type: string }) => {
                                 <div className="w-full flex flex-col">
                                   <FormControl>
                                     <Input placeholder="Enter your first name" {...field}
+                                           className="text-16 text-gray-900 placeholder:text-16 placeholder:text-gray-500 rounded-lg border border-gray-300"/>
+                                  </FormControl>
+                                  <FormMessage className="mt-2 text-12 text-red-500"/>
+                                </div>
+                              </FormItem>
+                            </div>
+                        )}/>
+                        {/*  City  */}
+                        <FormField control={form.control} name="city" render={({field}) => (
+                            <div className="w-full flex flex-col gap-1.5">
+                              <FormItem>
+                                <FormLabel>City</FormLabel>
+                                <div className="w-full flex flex-col">
+                                  <FormControl>
+                                    <Input placeholder="Enter your city" {...field}
                                            className="text-16 text-gray-900 placeholder:text-16 placeholder:text-gray-500 rounded-lg border border-gray-300"/>
                                   </FormControl>
                                   <FormMessage className="mt-2 text-12 text-red-500"/>
