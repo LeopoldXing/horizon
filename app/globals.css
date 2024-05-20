@@ -49,4 +49,12 @@
     .text-balance {
         text-wrap: balance;
     }
+
+    .form-input {
+        @apply text-16 text-gray-900 placeholder:text-16 placeholder:text-gray-500 rounded-lg border border-gray-300
+    }
+
+    .form-message {
+        @apply mt-2 text-12 text-red-500
+    }
 }
