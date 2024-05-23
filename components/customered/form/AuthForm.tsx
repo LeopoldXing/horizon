@@ -11,10 +11,12 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {Input} from "@/components/ui/input";
 import {Loader2} from "lucide-react";
 import {signIn, signUp} from "@/lib/actions/user.actions";
+import {useRouter} from "next/navigation";
 
 const AuthForm = ({type}: { type: string }) => {
   const [user, setUser] = useState<User>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   /*  form schema  */
   const formSchema = z.object({
@@ -76,7 +78,8 @@ const AuthForm = ({type}: { type: string }) => {
         const response = await signIn({
           email: data.email,
           password: data.password
-        })
+        });
+        if (response) router.push("/");
       }
     } catch (err) {
       console.error(err);

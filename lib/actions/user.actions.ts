@@ -2,16 +2,30 @@
 
 import {createAdminClient, createSessionClient} from "@/lib/appwrite";
 import {cookies} from "next/headers";
-import {ID} from "node-appwrite";
+import {ID, Models} from "node-appwrite";
 
-const signIn = async (data: SignInProps): Promise<void> => {
+/**
+ * handle sign in
+ * @param data
+ */
+const signIn = async (data: SignInProps): Promise<Models.Session> => {
+  const {email, password} = data;
+
+  let response = null;
   try {
-
+    const {account} = await createAdminClient();
+    response = await account.createEmailPasswordSession(email, password);
   } catch (err) {
     console.error("Error logging in signing in", err);
   }
+
+  return JSON.parse(JSON.stringify(response));
 }
 
+/**
+ * handle sign up
+ * @param data
+ */
 const signUp = async (data: SignUpProps): Promise<User> => {
   const {email, password, firstName, lastName} = data;
   let newUserAccount = null;

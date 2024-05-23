@@ -1,13 +1,20 @@
 import React from 'react';
 import HeaderBar from "@/components/customered/layout/HeaderBar";
 import RightSideBar from "@/components/customered/layout/RightSideBar";
+import {getLoggedInUser} from "@/lib/actions/user.actions";
 
-const RootPage = () => {
+const RootPage = async () => {
+  const loggedInUser = await getLoggedInUser();
+  let firstName = "";
+  let lastName = "";
+  if (loggedInUser) {
+    let name = loggedInUser.name;
+    firstName = name.split(" ")[0];
+    lastName = name.split(" ")[1];
+  }
+
   const loginInfo = {
-    user: {
-      firstName: "Leopold",
-      lastName: "Hsing"
-    }
+    user: {...loggedInUser, firstName: firstName, lastName: lastName}
   }
 
   return (
