@@ -11,7 +11,7 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {Input} from "@/components/ui/input";
 import {Loader2} from "lucide-react";
 import {signIn, signUp} from "@/lib/actions/user.actions";
-import {useRouter} from "next/navigation";
+import {redirect, useRouter} from "next/navigation";
 
 const AuthForm = ({type}: { type: string }) => {
   const [user, setUser] = useState<User>();
@@ -74,6 +74,7 @@ const AuthForm = ({type}: { type: string }) => {
         }
         const newUser = await signUp(userData);
         setUser(newUser);
+        router.push("/");
       } else if (type === "sign-in") {
         const response = await signIn({
           email: data.email,

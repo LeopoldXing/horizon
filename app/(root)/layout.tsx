@@ -2,13 +2,23 @@ import React from 'react';
 import SideBar from "@/components/customered/layout/SideBar";
 import Image from "next/image";
 import MobileNavBar from "@/components/customered/layout/MobileNavBar";
+import {getLoggedInUser} from "@/lib/actions/user.actions";
+import {redirect} from "next/navigation";
 
-const RootLayout = ({children}: { children: React.ReactNode }) => {
+const RootLayout = async ({children}: { children: React.ReactNode }) => {
+  const loggedInUser = await getLoggedInUser();
+  let firstName = "";
+  let lastName = "";
+  if (loggedInUser) {
+    let name = loggedInUser.name;
+    firstName = name.split(" ")[0];
+    lastName = name.split(" ")[1];
+  } else {
+    redirect("/sign-in");
+  }
+
   const loginInfo = {
-    user: {
-      firstName: "Leopold",
-      lastName: "Hsing"
-    }
+    user: {...loggedInUser, firstName: firstName, lastName: lastName}
   }
 
   return (

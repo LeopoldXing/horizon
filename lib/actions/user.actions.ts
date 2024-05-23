@@ -15,10 +15,10 @@ const signIn = async (data: SignInProps): Promise<Models.Session> => {
   try {
     const {account} = await createAdminClient();
     response = await account.createEmailPasswordSession(email, password);
+    cookies().set("horizon-session", response.secret, {path: "/", httpOnly: true, sameSite: "strict", secure: true});
   } catch (err) {
     console.error("Error logging in signing in", err);
   }
-
   return JSON.parse(JSON.stringify(response));
 }
 
@@ -44,12 +44,20 @@ const signUp = async (data: SignUpProps): Promise<User> => {
   return JSON.parse(JSON.stringify(newUserAccount));
 }
 
-const signOut = async (): Promise<void> => {
-  try {
+const signOut = async (): Promise<Boolean> => {
+  let res = false;
 
+  try {
+    const {account} = await createSessionClient();
+    cookies().delete("horizon-session");
+    await account.deleteSession("current");
+    res = true;
   } catch (err) {
     console.error("Error logging out signing out", err);
+    res = false;
   }
+
+  return res;
 }
 
 const getLoggedInUser = async () => {
