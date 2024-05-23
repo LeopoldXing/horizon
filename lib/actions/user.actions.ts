@@ -1,5 +1,9 @@
 "use server";
 
+import {createAdminClient, createSessionClient} from "@/lib/appwrite";
+import {cookies} from "next/headers";
+import {ID} from "node-appwrite";
+
 const signIn = async (data: SignInProps): Promise<void> => {
   try {
 
@@ -9,13 +13,21 @@ const signIn = async (data: SignInProps): Promise<void> => {
 }
 
 const signUp = async (data: SignUpProps): Promise<User> => {
-  try {
+  const {email, password, firstName, lastName} = data;
+  let newUserAccount = null;
 
+  try {
+    const {account} = await createAdminClient();
+
+    newUserAccount = await account.create(ID.unique(), email, password, `${firstName} ${lastName}`);
+    const session = await account.createEmailPasswordSession(email, password);
+
+    cookies().set("horizon-session", session.secret, {path: "/", httpOnly: true, sameSite: "strict", secure: true});
   } catch (err) {
     console.error("Error logging in signing up", err);
   }
 
-  return {firstName: ""};
+  return JSON.parse(JSON.stringify(newUserAccount));
 }
 
 const signOut = async (): Promise<void> => {
@@ -26,4 +38,14 @@ const signOut = async (): Promise<void> => {
   }
 }
 
-export {signIn, signUp, signOut};
+const getLoggedInUser = async () => {
+  try {
+    const {account} = await createSessionClient();
+    return await account.get();
+  } catch (error) {
+    return null;
+  }
+}
+
+
+export {signIn, signUp, signOut, getLoggedInUser};
