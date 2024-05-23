@@ -41,7 +41,8 @@ const signOut = async (): Promise<void> => {
 const getLoggedInUser = async () => {
   try {
     const {account} = await createSessionClient();
-    return await account.get();
+    const user = await account.get();
+    return JSON.parse(JSON.stringify(user));
   } catch (error) {
     return null;
   }
