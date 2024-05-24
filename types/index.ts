@@ -1,8 +1,18 @@
 declare interface User {
+  $id: string;
+  email: string;
+  userId: string;
+  dwollaCustomerUrl: string;
+  dwollaCustomerId: string;
+  name: string;
   firstName: string;
-  lastName?: string;
-  name?: string;
-  email?: string;
+  lastName: string;
+  address1: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  dateOfBirth: string;
+  ssn: string;
 }
 
 declare type Account = {

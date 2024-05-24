@@ -12,6 +12,7 @@ import {Input} from "@/components/ui/input";
 import {Loader2} from "lucide-react";
 import {signIn, signUp} from "@/lib/actions/user.actions";
 import {redirect, useRouter} from "next/navigation";
+import PlaidLink from "@/components/customized/PlaidLink";
 
 const AuthForm = ({type}: { type: string }) => {
   const [user, setUser] = useState<User>();
@@ -107,7 +108,7 @@ const AuthForm = ({type}: { type: string }) => {
         </header>
         {user ? (
             <div className="flex flex-col gap-4">
-              {/*  PlaidLink  */}
+              <PlaidLink user={user} variant="primary"/>
             </div>
         ) : (
             <>
