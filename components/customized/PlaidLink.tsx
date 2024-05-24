@@ -18,7 +18,7 @@ const PlaidLink = ({user, variant}: PlaidLinkProps) => {
   useEffect(() => {
     const getLinkToken = async () => {
       const data = await generateLinkToken(user);
-      setToken(data?.linkToken);
+      setToken(data?.link_token);
     }
     getLinkToken();
   }, [user]);
@@ -28,16 +28,9 @@ const PlaidLink = ({user, variant}: PlaidLinkProps) => {
     router.push("/");
   }, [user])
 
-  const config: PlaidLinkOptions = {
-    onSuccess: onSuccess,
-    onExit: (err, metadata) => {
-    },
-    onEvent: (eventName, metadata) => {
-    },
-    token: 'GENERATED_LINK_TOKEN',
-  };
+  const config: PlaidLinkOptions = {token, onSuccess};
 
-  const {open, exit, ready} = usePlaidLink(config);
+  const {open, ready} = usePlaidLink(config);
 
   return (
       <>

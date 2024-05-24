@@ -7,7 +7,7 @@ import {plaidClient} from "@/lib/plaid";
 import {CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products} from "plaid";
 import {btoa} from "node:buffer";
 import {revalidatePath} from "next/cache";
-import {addFundingSource} from "@/lib/actions/dwolla.actions";
+import {addFundingSource, createDwollaCustomer} from "@/lib/actions/dwolla.actions";
 
 /**
  * handle sign in
@@ -31,14 +31,67 @@ const signIn = async (data: SignInProps): Promise<Models.Session> => {
  * handle sign up
  * @param data
  */
-const signUp = async (data: SignUpProps): Promise<User> => {
-  const {email, password, firstName, lastName} = data;
-  let newUserAccount = null;
+const signUp = async (data: {
+  firstName: string;
+  lastName: string;
+  address1: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  dateOfBirth: string;
+  ssn: string;
+  email: string;
+  password: string;
+}): Promise<User> => {
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    address1,
+    city,
+    postalCode,
+    dateOfBirth,
+    ssn,
+    state
+  } = data;
+  let newUser;
 
   try {
     const {account} = await createAdminClient();
 
-    newUserAccount = await account.create(ID.unique(), email, password, `${firstName} ${lastName}`);
+    const newUserAccount = await account.create(ID.unique(), email, password, `${firstName} ${lastName}`);
+    if (!newUserAccount) {
+      throw new Error("Error creating user account");
+    }
+    const dwollaCustomerUrl = await createDwollaCustomer({...data, type: "personal"});
+    if (!dwollaCustomerUrl) {
+      throw new Error("Error creating Dwolla customer");
+    }
+    const urlPaths = dwollaCustomerUrl.split("/");
+    const dwollaCustomerId = urlPaths[urlPaths.length - 1];
+
+    // add to the database
+    const {database} = await createAdminClient();
+    newUser = await database.createDocument(
+        process.env.APPWRITE_DATABASE_ID!,
+        process.env.APPWRITE_USER_COLLECTION_ID!,
+        ID.unique(),
+        {
+          userId: newUserAccount.$id,
+          email,
+          firstName,
+          lastName,
+          address1,
+          city,
+          postalCode,
+          dateOfBirth,
+          ssn,
+          state,
+          dwollaCustomerId,
+          dwollaCustomerUrl
+        });
+
     const session = await account.createEmailPasswordSession(email, password);
 
     cookies().set("horizon-session", session.secret, {path: "/", httpOnly: true, sameSite: "strict", secure: true});
@@ -46,7 +99,7 @@ const signUp = async (data: SignUpProps): Promise<User> => {
     console.error("Error logging in signing up", err);
   }
 
-  return JSON.parse(JSON.stringify(newUserAccount));
+  return JSON.parse(JSON.stringify(newUser));
 }
 
 const signOut = async (): Promise<Boolean> => {
@@ -79,7 +132,7 @@ const generateLinkToken = async (user: User) => {
   try {
     const tokenResponse = await plaidClient.linkTokenCreate({
       user: {client_user_id: user.$id},
-      client_name: user.name,
+      client_name: `${user.firstName} ${user.lastName}`,
       products: ["auth"] as Products[],
       language: "en",
       country_codes: ["US"] as CountryCode[],

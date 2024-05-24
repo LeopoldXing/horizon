@@ -1,7 +1,7 @@
 declare interface User {
   $id: string;
-  email: string;
   userId: string;
+  email: string;
   dwollaCustomerUrl: string;
   dwollaCustomerId: string;
   name: string;
@@ -58,19 +58,6 @@ declare type Bank = {
 };
 
 declare interface SignInProps {
-  email: string;
-  password: string;
-}
-
-declare interface SignUpProps {
-  firstName?: string;
-  lastName?: string;
-  address1?: string;
-  city?: string;
-  state?: string;
-  postalCode?: string;
-  dateOfBirth?: string;
-  ssn?: string;
   email: string;
   password: string;
 }
