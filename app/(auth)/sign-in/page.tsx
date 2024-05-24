@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthForm from "@/components/customered/form/AuthForm";
+import AuthForm from "@/components/customized/form/AuthForm";
 
 const SignInPage = () => {
   return (

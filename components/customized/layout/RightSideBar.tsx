@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import BankCard from "@/components/customered/BankCard";
+import BankCard from "@/components/customized/BankCard";
 import {account1, account2} from "@/lib/constants";
 
 type RightSideBarProps = {

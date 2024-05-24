@@ -1,5 +1,5 @@
 import React from 'react';
-import TotalBalanceBox from "@/components/customered/TotalBalanceBox";
+import TotalBalanceBox from "@/components/customized/TotalBalanceBox";
 
 type HeaderBarProps = {
   type?: "greeting" | "title";

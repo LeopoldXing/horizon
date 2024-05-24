@@ -6,7 +6,7 @@ import Image from "next/image";
 import {sidebarLinks} from "@/lib/constants";
 import {cn} from "@/lib/utils";
 import {usePathname} from "next/navigation";
-import Footer from "@/components/customered/layout/Footer";
+import Footer from "@/components/customized/layout/Footer";
 
 interface SideBarProps {
   user: User

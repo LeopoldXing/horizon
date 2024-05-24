@@ -1,7 +1,7 @@
 import React from 'react';
-import SideBar from "@/components/customered/layout/SideBar";
+import SideBar from "@/components/customized/layout/SideBar";
 import Image from "next/image";
-import MobileNavBar from "@/components/customered/layout/MobileNavBar";
+import MobileNavBar from "@/components/customized/layout/MobileNavBar";
 import {getLoggedInUser} from "@/lib/actions/user.actions";
 import {redirect} from "next/navigation";
 

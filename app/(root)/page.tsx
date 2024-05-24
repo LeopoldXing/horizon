@@ -1,6 +1,6 @@
 import React from 'react';
-import HeaderBar from "@/components/customered/layout/HeaderBar";
-import RightSideBar from "@/components/customered/layout/RightSideBar";
+import HeaderBar from "@/components/customized/layout/HeaderBar";
+import RightSideBar from "@/components/customized/layout/RightSideBar";
 import {getLoggedInUser} from "@/lib/actions/user.actions";
 
 const RootPage = async () => {

@@ -7,7 +7,7 @@ import {sidebarLinks} from "@/lib/constants";
 import Link from "next/link";
 import {cn} from "@/lib/utils";
 import {usePathname} from "next/navigation";
-import Footer from "@/components/customered/layout/Footer";
+import Footer from "@/components/customized/layout/Footer";
 
 type MobileNavBarProps = {
   user: User
