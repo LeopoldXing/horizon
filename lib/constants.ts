@@ -147,7 +147,7 @@ export const account1 = {
   type: "debit",
   subtype: "debit",
   appwriteItemId: "123",
-  sharableId: "1234"
+  shareableId: "1234"
 }
 
 export const account2 = {
@@ -161,5 +161,5 @@ export const account2 = {
   type: "credit",
   subtype: "credit",
   appwriteItemId: "254",
-  sharableId: "25453"
+  shareableId: "25453"
 }
