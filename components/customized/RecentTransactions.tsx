@@ -4,6 +4,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {BankTabItem} from "@/components/customized/BankTabItem";
 import BankInfo from "@/components/customized/BankInfo";
 import TransactionTable from "@/components/customized/TransactionTable";
+import {Pagination} from "@/components/customized/Pagination";
 
 declare type RecentTransactionsProps = {
   accountList: Array<Account>;
@@ -11,7 +12,13 @@ declare type RecentTransactionsProps = {
   appwriteItemId: string;
   currentPage: number;
 }
-const RecentTransactions = ({accountList, transactionList, appwriteItemId, currentPage}: RecentTransactionsProps) => {
+const RecentTransactions = ({accountList, transactionList, appwriteItemId, currentPage = 1}: RecentTransactionsProps) => {
+  const rowsPerPage = 10;
+  const totalPages = Math.ceil(transactionList.length / rowsPerPage);
+  const indexOfLastTransaction = currentPage * rowsPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - rowsPerPage;
+  const currentTransactionList = transactionList.slice(indexOfFirstTransaction, indexOfLastTransaction);
+
   return (
       <section className="w-full flex flex-col gap-6">
         <header className="flex items-center justify-between">
@@ -32,7 +39,12 @@ const RecentTransactions = ({accountList, transactionList, appwriteItemId, curre
           {accountList.map((account: Account) => (
               <TabsContent value={account.appwriteItemId} key={account.id} className="space-y-4">
                 <BankInfo account={account} type="full" appwriteItemId={appwriteItemId}/>
-                <TransactionTable transactionList={transactionList}/>
+                <TransactionTable transactionList={currentTransactionList}/>
+                {totalPages > 1 && (
+                    <div className="w-full my-4">
+                      <Pagination page={currentPage} totalPages={totalPages}/>
+                    </div>
+                )}
               </TabsContent>
           ))}
         </Tabs>
