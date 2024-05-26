@@ -1,6 +1,6 @@
 "use server";
 
-import {ACHClass, CountryCode, TransferAuthorizationCreateRequest, TransferCreateRequest, TransferNetwork, TransferType} from "plaid";
+import {CountryCode} from "plaid";
 import {plaidClient} from "../plaid";
 import {getTransactionsByBankId} from "./transaction.actions";
 import {Query} from "node-appwrite";

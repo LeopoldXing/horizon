@@ -4,6 +4,7 @@ import RightSideBar from "@/components/customized/layout/RightSideBar";
 import {getLoggedInUser} from "@/lib/actions/user.actions";
 import {getAccount, getAccounts} from "@/lib/actions/bank.actions";
 import TotalBalanceBox from "@/components/customized/TotalBalanceBox";
+import RecentTransactions from "@/components/customized/RecentTransactions";
 
 declare type SearchParamProps = {
   params: { [key: string]: string };
@@ -11,6 +12,7 @@ declare type SearchParamProps = {
 };
 
 const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
+  const currentPage = Number(page as string) || 1;
   // get user
   const loggedInUser = await getLoggedInUser();
 
@@ -42,9 +44,12 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
             <TotalBalanceBox accounts={accountList} totalBanks={accountListData.totalBanks}
                              totalCurrentBalance={accountListData.totalCurrentBalance}/>
           </div>
+
+          <RecentTransactions accountList={accountList} transactionList={account.transactionList} appwriteItemId={appwriteItemId}
+                              currentPage={currentPage}/>
         </div>
 
-        <RightSideBar user={loggedInUser} bankList={accountList?.slice(0, 2)} transactionList={account?.transactionList}/>
+        <RightSideBar user={loggedInUser} bankList={accountList?.slice(0, 2)} transactionList={account.transactionList}/>
       </div>
   );
 };

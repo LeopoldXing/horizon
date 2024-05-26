@@ -61,3 +61,5 @@ declare interface SignInProps {
   email: string;
   password: string;
 }
+
+declare type AccountTypes = "depository" | "credit" | "loan " | "investment" | "other";

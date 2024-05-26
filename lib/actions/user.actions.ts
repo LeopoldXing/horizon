@@ -147,8 +147,6 @@ const getLoggedInUser = async (): Promise<User> => {
     user.name = `${user.firstName} ${user.lastName}`;
     res = JSON.parse(JSON.stringify(user));
   } catch (error) {
-    console.error("Error getting loggedInUser");
-    console.error(error);
   }
   return res;
 }
