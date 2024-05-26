@@ -2,7 +2,8 @@ import React from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import BankCard from "@/components/customized/BankCard";
-import {account1, account2} from "@/lib/constants";
+import {countTransactionCategories} from "@/lib/utils";
+import Category from "@/components/customized/Category";
 
 type RightSideBarProps = {
   user: User;
@@ -11,6 +12,9 @@ type RightSideBarProps = {
 }
 
 const RightSideBar = ({user, transactionList, bankList}: RightSideBarProps) => {
+  const categoryList = countTransactionCategories(transactionList);
+  console.log(categoryList);
+
   return (
       <aside className="right-sidebar">
         <div className="flex flex-col pb-8">
@@ -53,6 +57,16 @@ const RightSideBar = ({user, transactionList, bankList}: RightSideBarProps) => {
                 )}
               </div>
           )}
+
+          {/*  budget list  */}
+          <div className="mt-10 flex flex-col flex-1 gap-6">
+            <h2 className="text-[18px] leading-[22px] text-gray-900 font-semibold">Top categories</h2>
+            <div className="space-y-5">
+              {Array.isArray(categoryList) && categoryList.length > 0 && categoryList.map((category) => (
+                  <Category key={category.name} category={category}/>
+              ))}
+            </div>
+          </div>
         </div>
       </aside>
   );

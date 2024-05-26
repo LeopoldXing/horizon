@@ -63,4 +63,10 @@ declare interface SignInProps {
   password: string;
 }
 
+declare type CategoryCount = {
+  name: string;
+  count: number;
+  totalCount: number;
+};
+
 declare type AccountTypes = "depository" | "credit" | "loan " | "investment" | "other";
