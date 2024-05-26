@@ -86,3 +86,7 @@ export const formatDateTime = (dateString: Date) => {
     timeOnly: formattedTime,
   };
 };
+
+export function decryptId(id: string) {
+  return atob(id);
+}

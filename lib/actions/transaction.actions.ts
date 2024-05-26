@@ -2,7 +2,7 @@
 
 import {plaidClient} from "@/lib/plaid";
 import {createAdminClient} from "@/lib/appwrite";
-import {Query} from "node-appwrite";
+import {ID, Query} from "node-appwrite";
 
 const getTransactions = async (accessToken: string) => {
   let hasMore = true;
@@ -64,4 +64,31 @@ const getTransactionsByBankId = async (bankId: string) => {
   }
 }
 
-export {getTransactions, getTransactionsByBankId};
+declare type CreateTransactionProps = {
+  name: string;
+  amount: string;
+  senderId: string;
+  senderBankId: string;
+  receiverId: string;
+  receiverBankId: string;
+  email: string;
+}
+
+const createTransaction = async (transaction: CreateTransactionProps) => {
+  try {
+    const {database} = await createAdminClient();
+
+    const newTransaction = await database.createDocument(
+        process.env.APPWRITE_DATABASE_ID!,
+        process.env.APPWRITE_TRANSACTION_COLLECTION_ID!,
+        ID.unique(),
+        {channel: 'online', category: 'Transfer', ...transaction}
+    )
+
+    return JSON.parse(JSON.stringify(newTransaction));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export {getTransactions, getTransactionsByBankId, createTransaction};

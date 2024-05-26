@@ -51,11 +51,11 @@
     }
 
     .form-input {
-        @apply text-16 text-gray-900 placeholder:text-16 placeholder:text-gray-500 rounded-lg border border-gray-300
+        @apply text-[16px] leading-[24px] text-gray-900 placeholder:text-16 placeholder:text-gray-500 rounded-lg border border-gray-300
     }
 
     .form-message {
-        @apply mt-2 text-12 text-red-500
+        @apply mt-2 text-[12px] leading-[16px] text-red-500
     }
 
     .category-badge {
@@ -64,6 +64,14 @@
 
     .right-sidebar {
         @apply min-w-[400px] h-screen max-h-screen hidden flex-col border-l border-gray-200 no-scrollbar xl:flex xl:overflow-y-scroll !important
+    }
+
+    .payment-transfer_btn-box {
+        @apply mt-5 flex w-full max-w-[850px] gap-3 border-gray-200 py-5;
+    }
+
+    .payment-transfer_btn {
+        @apply text-[14px] leading-[20px] w-full bg-bank-gradient font-semibold text-white shadow-form !important;
     }
 
 }
