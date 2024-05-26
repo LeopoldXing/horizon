@@ -1,5 +1,4 @@
 import React from 'react';
-import TotalBalanceBox from "@/components/customized/TotalBalanceBox";
 
 type HeaderBarProps = {
   type?: "greeting" | "title";
@@ -14,11 +13,10 @@ const HeaderBar = ({type = "title", title, user, subText}: HeaderBarProps) => {
         <h1 className="text-24 lg:text-30 font-semibold text-gray-900">
           {title}
           {type === "greeting" && (
-              <span className="text-bankGradient">&nbsp;{user === "guest" ? "Guest" : user.name}</span>
+              <span className="text-bankGradient">&nbsp;{user === "guest" ? "Guest" : user.firstName}</span>
           )}
         </h1>
         <p className="text-14 lg:text-16 font-normal text-gray-600">{subText}</p>
-        <TotalBalanceBox accounts={[]} totalBanks={1} totalCurrentBalance={1220.37}/>
       </div>
   );
 };

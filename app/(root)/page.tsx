@@ -2,20 +2,33 @@ import React from 'react';
 import HeaderBar from "@/components/customized/layout/HeaderBar";
 import RightSideBar from "@/components/customized/layout/RightSideBar";
 import {getLoggedInUser} from "@/lib/actions/user.actions";
+import {getAccount, getAccounts} from "@/lib/actions/bank.actions";
+import TotalBalanceBox from "@/components/customized/TotalBalanceBox";
 
-const RootPage = async () => {
+declare type SearchParamProps = {
+  params: { [key: string]: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
+  // get user
   const loggedInUser = await getLoggedInUser();
-  let firstName = "";
-  let lastName = "";
-  if (loggedInUser) {
-    let name = loggedInUser.name;
-    firstName = name.split(" ")[0];
-    lastName = name.split(" ")[1];
-  }
 
-  const loginInfo = {
-    user: {...loggedInUser, firstName: firstName, lastName: lastName}
-  }
+  // get accounts
+  const accountListData = await getAccounts(loggedInUser.$id);
+  if (!accountListData) return;
+  const accountList = accountListData.data;
+  const appwriteItemId = (id as string) || (accountList[0]?.appwriteItemId);
+  const account = await getAccount(appwriteItemId);
+
+  console.log("account -> ")
+  console.log(account);
+
+  console.log("accountListData -> ");
+  console.log(accountListData);
+
+  console.log("loggedInUser -> ")
+  console.log(loggedInUser);
 
   return (
       /*  home  */
@@ -24,12 +37,14 @@ const RootPage = async () => {
         <div className="px-5 sm:px-8 py-7 lg:py-12 w-full flex flex-col flex-1 gap-8 no-scrollbar xl:max-h-screen xl:overflow-y-scroll">
           {/*  home header  */}
           <div className="flex flex-col justify-between gap-8">
-            <HeaderBar type="greeting" title="Welcome" user={loginInfo?.user || "guest"}
+            <HeaderBar type="greeting" title="Welcome" user={loggedInUser || "guest"}
                        subText="Access and manage your accounts and transactions efficiently"/>
+            <TotalBalanceBox accounts={accountList} totalBanks={accountListData.totalBanks}
+                             totalCurrentBalance={accountListData.totalCurrentBalance}/>
           </div>
         </div>
 
-        <RightSideBar user={loginInfo.user} bankList={[]} transactionList={[]}/>
+        <RightSideBar user={loggedInUser} bankList={accountList?.slice(0, 2)} transactionList={account?.transactionList}/>
       </div>
   );
 };

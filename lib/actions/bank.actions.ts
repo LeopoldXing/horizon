@@ -8,12 +8,18 @@ import {createAdminClient} from "@/lib/appwrite";
 import {getTransactions} from "./transaction.actions";
 
 // Get multiple bank accounts
-export const getAccounts = async (userId: string) => {
+declare type GetAccountsReturnType = {
+  data: Array<Account>,
+  totalBanks: number,
+  totalCurrentBalance: number
+}
+export const getAccounts = async (userId: string): Promise<GetAccountsReturnType> => {
+  let res = null;
   try {
     // get banks from db
     const banks = await getBanksByUserId(userId);
 
-    const accounts = await Promise.all(
+    const accounts: Array<Account> = await Promise.all(
         banks?.map(async (bank: Bank) => {
           // get each account info from plaid
           const accountsResponse = await plaidClient.accountsGet({access_token: bank.accessToken});
@@ -26,10 +32,10 @@ export const getAccounts = async (userId: string) => {
             id: accountData.account_id,
             availableBalance: accountData.balances.available!,
             currentBalance: accountData.balances.current!,
-            institutionId: institution.institution_id,
-            name: accountData.name,
             officialName: accountData.official_name,
             mask: accountData.mask!,
+            institutionId: institution.institution_id,
+            name: accountData.name,
             type: accountData.type as string,
             subtype: accountData.subtype! as string,
             appwriteItemId: bank.$id,
@@ -43,14 +49,20 @@ export const getAccounts = async (userId: string) => {
     const totalBanks = accounts.length;
     const totalCurrentBalance = accounts.reduce((total, account) => total + account.currentBalance, 0);
 
-    return JSON.parse(JSON.stringify({data: accounts, totalBanks, totalCurrentBalance}));
+    res = JSON.parse(JSON.stringify({data: accounts, totalBanks, totalCurrentBalance}));
   } catch (error) {
     console.error("An error occurred while getting the accounts:", error);
   }
+  return res;
 };
 
 // Get one bank account
-export const getAccount = async (appwriteItemId: string) => {
+declare type GetAccountReturnType = {
+  data: Account,
+  transactionList: Array<Transaction>
+}
+export const getAccount = async (appwriteItemId: string): Promise<GetAccountReturnType> => {
+  let res = null;
   try {
     // get bank from db
     const bank = await getBank(appwriteItemId);
@@ -58,6 +70,12 @@ export const getAccount = async (appwriteItemId: string) => {
     // get account info from plaid
     const accountsResponse = await plaidClient.accountsGet({access_token: bank.accessToken});
     const accountData = accountsResponse.data.accounts[0];
+
+    console.log("getAccount - accountData -> ")
+    console.log(accountData);
+
+    console.log("getAccount - bank -> ")
+    console.log(bank);
 
     // get transfer transactions from appwrite
     const transferTransactionsData = await getTransactionsByBankId(bank.$id);
@@ -79,6 +97,9 @@ export const getAccount = async (appwriteItemId: string) => {
 
     const transactions = await getTransactions(bank?.accessToken);
 
+    console.log("getAccount - transactions -> ")
+    console.log(transactions);
+
     const account = {
       id: accountData.account_id,
       availableBalance: accountData.balances.available!,
@@ -97,10 +118,11 @@ export const getAccount = async (appwriteItemId: string) => {
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-    return JSON.parse(JSON.stringify({data: account, transactions: allTransactions}));
+    res = JSON.parse(JSON.stringify({data: account, transactionList: allTransactions}));
   } catch (error) {
     console.error("An error occurred while getting the account:", error);
   }
+  return res;
 };
 
 // Get bank info

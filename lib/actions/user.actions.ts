@@ -2,12 +2,29 @@
 
 import {createAdminClient, createSessionClient} from "@/lib/appwrite";
 import {cookies} from "next/headers";
-import {ID, Models} from "node-appwrite";
+import {ID, Models, Query} from "node-appwrite";
 import {plaidClient} from "@/lib/plaid";
 import {CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products} from "plaid";
 import {btoa} from "node:buffer";
 import {revalidatePath} from "next/cache";
 import {addFundingSource, createDwollaCustomer} from "@/lib/actions/dwolla.actions";
+
+const getUserInfo = async (userId: string): Promise<User> => {
+  let res = null;
+  try {
+    const {database} = await createAdminClient();
+    const appwriteUser = await database.listDocuments(
+        process.env.APPWRITE_DATABASE_ID!,
+        process.env.APPWRITE_USER_COLLECTION_ID!,
+        [Query.equal('userId', [userId])]
+    );
+    res = JSON.parse(JSON.stringify(appwriteUser.documents[0]));
+  } catch (err) {
+    console.error("Error getting userInfo");
+    console.error(err);
+  }
+  return res;
+}
 
 /**
  * handle sign in
@@ -16,15 +33,17 @@ import {addFundingSource, createDwollaCustomer} from "@/lib/actions/dwolla.actio
 const signIn = async (data: SignInProps): Promise<Models.Session> => {
   const {email, password} = data;
 
-  let response = null;
+  let user = null;
   try {
     const {account} = await createAdminClient();
-    response = await account.createEmailPasswordSession(email, password);
-    cookies().set("horizon-session", response.secret, {path: "/", httpOnly: true, sameSite: "strict", secure: true});
+    const session = await account.createEmailPasswordSession(email, password);
+    cookies().set("horizon-session", session.secret, {path: "/", httpOnly: true, sameSite: "strict", secure: true});
+
+    user = await getUserInfo(session.userId);
   } catch (err) {
     console.error("Error logging in signing in", err);
   }
-  return JSON.parse(JSON.stringify(response));
+  return JSON.parse(JSON.stringify(user));
 }
 
 /**
@@ -118,14 +137,20 @@ const signOut = async (): Promise<Boolean> => {
   return res;
 }
 
-const getLoggedInUser = async () => {
+const getLoggedInUser = async (): Promise<User> => {
+  let res = null;
   try {
     const {account} = await createSessionClient();
-    const user = await account.get();
-    return JSON.parse(JSON.stringify(user));
+    const appwriteAccount = await account.get();
+    const userId = appwriteAccount.$id;
+    const user = await getUserInfo(userId);
+    user.name = `${user.firstName} ${user.lastName}`;
+    res = JSON.parse(JSON.stringify(user));
   } catch (error) {
-    return null;
+    console.error("Error getting loggedInUser");
+    console.error(error);
   }
+  return res;
 }
 
 const generateLinkToken = async (user: User) => {
@@ -215,4 +240,4 @@ const createBankAccount = async ({userId, bankId, accountId, accessToken, fundin
   }
 }
 
-export {signIn, signUp, signOut, getLoggedInUser, generateLinkToken, exchangePublicToken, createBankAccount};
+export {getUserInfo, signIn, signUp, signOut, getLoggedInUser, generateLinkToken, exchangePublicToken, createBankAccount};
