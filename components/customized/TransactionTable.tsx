@@ -1,18 +1,7 @@
 import React from 'react';
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {cn, formatAmount, formatDateTime} from "@/lib/utils";
-import {getTransactionCategoryStyle} from "@/lib/constants";
-
-const CategoryBadge = ({children}: { children: string }) => {
-  const styleConfig = getTransactionCategoryStyle(children);
-
-  return (
-      <div className={`category-badge ${styleConfig.borderColor} ${styleConfig.chipBackgroundColor}`}>
-        <div className={`${styleConfig.backgroundColor} size-2 rounded-full`}/>
-        <p className={cn("text-[12px] font-medium", styleConfig.textColor)}>{children}</p>
-      </div>
-  )
-}
+import CategoryBadge from "@/components/customized/CategoryBadge";
 
 const TransactionTable = ({transactionList}: { transactionList: Array<Transaction> }) => {
   return (

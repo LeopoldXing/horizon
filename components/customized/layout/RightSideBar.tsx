@@ -12,8 +12,7 @@ type RightSideBarProps = {
 
 const RightSideBar = ({user, transactionList, bankList}: RightSideBarProps) => {
   return (
-      <aside className="w-[335px] h-screen max-h-screen hidden flex-col border-l border-gray-200 no-scrollbar
-                        xl:flex xl:overflow-y-scroll">
+      <aside className="right-sidebar">
         <div className="flex flex-col pb-8">
           {/*  profile banner  */}
           <div className="h-[120px] w-full bg-gradient-mesh bg-cover bg-no-repeat"/>
@@ -45,11 +44,11 @@ const RightSideBar = ({user, transactionList, bankList}: RightSideBarProps) => {
           {Array.isArray(bankList) && bankList.length > 0 && (
               <div className="relative flex flex-col flex-1 justify-center items-center gap-5">
                 <div className="relative z-10">
-                  <BankCard key={"1"} userName={user.name} account={account1} showBalance={false}/>
+                  <BankCard userName={user.name} account={bankList[0]} showBalance={false}/>
                 </div>
                 {bankList[1] && (
                     <div className="absolute right-0 top-8 z-0 w-[90%]">
-                      <BankCard key={"2"} userName={user.name} account={account2} showBalance={false}/>
+                      <BankCard userName={user.name} account={bankList[1]} showBalance={false}/>
                     </div>
                 )}
               </div>

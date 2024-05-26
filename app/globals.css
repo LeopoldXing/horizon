@@ -61,4 +61,9 @@
     .category-badge {
         @apply w-fit py-[2px] pl-1.5 pr-2 flex justify-center items-center gap-1 truncate border-[1.5px] rounded-2xl
     }
+
+    .right-sidebar {
+        @apply min-w-[400px] h-screen max-h-screen hidden flex-col border-l border-gray-200 no-scrollbar xl:flex xl:overflow-y-scroll !important
+    }
+
 }

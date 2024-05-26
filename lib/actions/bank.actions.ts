@@ -71,12 +71,6 @@ export const getAccount = async (appwriteItemId: string): Promise<GetAccountRetu
     const accountsResponse = await plaidClient.accountsGet({access_token: bank.accessToken});
     const accountData = accountsResponse.data.accounts[0];
 
-    console.log("getAccount - accountData -> ")
-    console.log(accountData);
-
-    console.log("getAccount - bank -> ")
-    console.log(bank);
-
     // get transfer transactions from appwrite
     const transferTransactionsData = await getTransactionsByBankId(bank.$id);
 
@@ -96,9 +90,6 @@ export const getAccount = async (appwriteItemId: string): Promise<GetAccountRetu
     const institution = await getInstitution(accountsResponse.data.item.institution_id!);
 
     const transactions = await getTransactions(bank?.accessToken);
-
-    console.log("getAccount - transactions -> ")
-    console.log(transactions);
 
     const account = {
       id: accountData.account_id,

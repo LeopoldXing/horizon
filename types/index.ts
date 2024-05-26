@@ -17,6 +17,7 @@ declare interface User {
 
 declare type Account = {
   id: string;
+  $id?: string;
   availableBalance: number;
   currentBalance: number;
   officialName: string;

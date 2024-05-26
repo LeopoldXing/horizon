@@ -23,15 +23,6 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
   const appwriteItemId = (id as string) || (accountList[0]?.appwriteItemId);
   const account = await getAccount(appwriteItemId);
 
-  console.log("account -> ")
-  console.log(account);
-
-  console.log("accountListData -> ");
-  console.log(accountListData);
-
-  console.log("loggedInUser -> ")
-  console.log(loggedInUser);
-
   return (
       /*  home  */
       <div className="w-full flex flex-row no-scrollbar max-xl:max-h-screen max-xl:overflow-y-scroll">
