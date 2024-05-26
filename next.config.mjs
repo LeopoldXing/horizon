@@ -1,7 +1,9 @@
 import {withSentryConfig} from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false
+  reactStrictMode: false,
+  /*  docker support  */
+  output: "standalone"
 };
 
 export default withSentryConfig(nextConfig, {
