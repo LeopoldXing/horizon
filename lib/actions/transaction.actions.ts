@@ -8,6 +8,7 @@ const BASE_URL = process.env.BASE_URL!.endsWith("/")
     ? process.env.BASE_URL!.slice(0, process.env.BASE_URL!.length)
     : process.env.BASE_URL;
 
+
 /**
  * create new transaction
  * @param transaction
@@ -16,6 +17,7 @@ export const createTransaction = async (transaction: CreateTransactionProps) => 
   try {
     const response = await fetch(`${BASE_URL}/transaction`, {
       method: "POST",
+      body: JSON.stringify(transaction),
       cache: "no-cache"
     });
 
@@ -29,6 +31,15 @@ export const createTransaction = async (transaction: CreateTransactionProps) => 
   } catch (error) {
     console.log(error);
   }
+}
+declare type CreateTransactionProps = {
+  name: string;
+  amount: string;
+  senderId: string;
+  senderBankId: string;
+  receiverId: string;
+  receiverBankId: string;
+  email: string;
 }
 
 
@@ -132,16 +143,6 @@ const getTransactionsByBankId = async (bankId: string) => {
   } catch (error) {
     console.log(error);
   }
-}
-
-declare type CreateTransactionProps = {
-  name: string;
-  amount: string;
-  senderId: string;
-  senderBankId: string;
-  receiverId: string;
-  receiverBankId: string;
-  email: string;
 }
 
 /*const createTransaction = async (transaction: CreateTransactionProps) => {

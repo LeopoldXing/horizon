@@ -8,6 +8,111 @@ import {CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestPro
 import {btoa} from "node:buffer";
 import {revalidatePath} from "next/cache";
 import {addFundingSource, createDwollaCustomer} from "@/lib/actions/dwolla.actions";
+import {md5} from "jiti/dist/utils";
+
+const BASE_URL = process.env.BASE_URL!.endsWith("/")
+    ? process.env.BASE_URL!.slice(0, process.env.BASE_URL!.length)
+    : process.env.BASE_URL;
+
+
+export const getUserInfoById = async (userId: string): Promise<any> => {
+  let res = null;
+  try {
+    const response = await fetch(`${BASE_URL}/user/${userId}`, {
+      method: "GET",
+      next: {revalidate: 1}
+    });
+    if (response.ok) {
+      res = await response.json();
+      return JSON.parse(JSON.stringify(res.data));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+/**
+ * user sign-in
+ * @param email
+ * @param password
+ */
+export const signIn = async (email: string, password: string): Promise<any> => {
+  let session, user;
+  try {
+    const response = await fetch(`${BASE_URL}/user/sign-in`, {
+      method: "POST",
+      body: JSON.stringify({email, password: md5(password)}),
+      next: {revalidate: 5}
+    });
+    if (response.ok) {
+      const res = await response.json();
+      const data = res.data;
+      session = data.session;
+      user = data.user;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+/**
+ * user logout
+ * @param userId
+ */
+export const signOut = async (userId: string): Promise<any> => {
+  let res = false;
+  try {
+    const response = await fetch(`${BASE_URL}/user/sign-out`, {
+      method: "POST",
+      body: JSON.stringify({userId: userId})
+    });
+    if (response.ok) {
+      res = true;
+      cookies().delete("horizon-session");
+    }
+  } catch (err) {
+    console.error("Error logging out signing out", err);
+  }
+
+  return res;
+}
+
+export const signUp = async (data: {
+  firstName: string;
+  lastName: string;
+  address1: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  dateOfBirth: string;
+  ssn: string;
+  email: string;
+  password: string;
+}): Promise<any> => {
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    address1,
+    city,
+    postalCode,
+    dateOfBirth,
+    ssn,
+    state
+  } = data;
+  let newUser;
+  try {
+
+
+  } catch (err) {
+    console.error("Error logging in signing up", err);
+  }
+
+  return JSON.parse(JSON.stringify(newUser));
+}
+
+/*  ----------------------------------------------------------------------------------------------------  */
 
 const getUserInfo = async (userId: string): Promise<User> => {
   let res = null;
@@ -30,7 +135,7 @@ const getUserInfo = async (userId: string): Promise<User> => {
  * handle sign in
  * @param data
  */
-const signIn = async (data: SignInProps): Promise<Models.Session> => {
+/*const signIn = async (data: SignInProps): Promise<Models.Session> => {
   const {email, password} = data;
 
   let user = null;
@@ -44,13 +149,13 @@ const signIn = async (data: SignInProps): Promise<Models.Session> => {
     console.error("Error logging in signing in", err);
   }
   return JSON.parse(JSON.stringify(user));
-}
+}*/
 
 /**
  * handle sign up
  * @param data
  */
-const signUp = async (data: {
+/*const signUp = async (data: {
   firstName: string;
   lastName: string;
   address1: string;
@@ -119,9 +224,9 @@ const signUp = async (data: {
   }
 
   return JSON.parse(JSON.stringify(newUser));
-}
+}*/
 
-const signOut = async (): Promise<Boolean> => {
+/*const signOut = async (): Promise<Boolean> => {
   let res = false;
 
   try {
@@ -135,7 +240,7 @@ const signOut = async (): Promise<Boolean> => {
   }
 
   return res;
-}
+}*/
 
 const getLoggedInUser = async (): Promise<User> => {
   let res = null;
@@ -238,4 +343,4 @@ const createBankAccount = async ({userId, bankId, accountId, accessToken, fundin
   }
 }
 
-export {getUserInfo, signIn, signUp, signOut, getLoggedInUser, generateLinkToken, exchangePublicToken, createBankAccount};
+export {getUserInfo, getLoggedInUser, generateLinkToken, exchangePublicToken, createBankAccount};
