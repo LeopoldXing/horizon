@@ -7,6 +7,155 @@ import {Query} from "node-appwrite";
 import {createAdminClient} from "@/lib/appwrite";
 import {getTransactions} from "./transaction.actions";
 
+const BASE_URL = process.env.BASE_URL!.endsWith("/")
+    ? process.env.BASE_URL!.slice(0, process.env.BASE_URL!.length)
+    : process.env.BASE_URL;
+
+
+/**
+ * find a bank list related to the userId
+ * @param userId
+ */
+export const getBankListByUserId = async (userId: string): Promise<any> => {
+  let res;
+  try {
+    const response = await fetch(`${BASE_URL}/bank/list/${userId}`, {
+      method: "GET",
+      next: {revalidate: 1}
+    });
+    if (response.ok) {
+      res = await response.json();
+      return JSON.parse(JSON.stringify(res.data));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
+/**
+ * find a account list related to a user
+ * @param userId
+ */
+export const getAccountListByUserId = async (userId: string): Promise<any> => {
+  let res;
+  try {
+    const response = await fetch(`${BASE_URL}/account/list/${userId}`, {
+      method: "GET",
+      next: {revalidate: 1}
+    });
+    if (response.ok) {
+      res = await response.json();
+      return JSON.parse(JSON.stringify(res.data));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
+/**
+ * find the bank by accountId
+ * @param accountId
+ */
+/*export const getBankByAccountId = async (accountId: string): Promise<any> => {
+  let res;
+  try {
+    const response = await fetch(`${BASE_URL}/bank/accountId/${accountId}`, {
+      method: "GET",
+      next: {revalidate: 1}
+    });
+    if (response.ok) {
+      res = await response.json();
+      return JSON.parse(JSON.stringify(res));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}*/
+
+/**
+ * get how many banks does a user possess.
+ * @param userId
+ */
+export const getUserBankNumber = async (userId: string): Promise<any> => {
+  let res;
+  try {
+    const response = await fetch(`${BASE_URL}/user/bank-quantity/${userId}`, {
+      method: "GET",
+      next: {revalidate: 5}
+    });
+    if (response.ok) {
+      res = await response.json();
+      return res.data;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+/**
+ * get user's current balance
+ * @param userId
+ */
+export const getUserCurrentBalance = async (userId: string): Promise<any> => {
+  let res;
+  try {
+    const response = await fetch(`${BASE_URL}/user/total-balance/${userId}`, {
+      method: "GET",
+      next: {revalidate: 5}
+    });
+    if (response.ok) {
+      res = await response.json();
+      return res.data;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+/**
+ * get user's transaction list
+ * @param userId
+ */
+export const getTransactionListByUserId = async (userId: string): Promise<any> => {
+  let res;
+  try {
+    const response = await fetch(`${BASE_URL}/user/${userId}/transaction-list`, {
+      method: "GET",
+      next: {revalidate: 1}
+    });
+    if (response.ok) {
+      res = await response.json();
+      return JSON.parse(JSON.stringify(res.data));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+/**
+ * get bank details by id
+ * @param bankId
+ */
+export const getBankInfoById = async (bankId: string) => {
+  let res;
+  try {
+    const response = await fetch(`${BASE_URL}/bank/${bankId}`, {
+      method: "GET",
+      next: {revalidate: 1}
+    });
+    if (response.ok) {
+      res = await response.json();
+      return JSON.parse(JSON.stringify(res.data));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+/*  -----------------------------------------------------------------------------------------------------------------  */
+
 // Get multiple bank accounts
 declare type GetAccountsReturnType = {
   data: Array<Account>,

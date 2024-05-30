@@ -70,3 +70,9 @@ declare type CategoryCount = {
 };
 
 declare type AccountTypes = "depository" | "credit" | "loan " | "investment" | "other";
+
+declare interface ResponseDto {
+  statusCode: string;
+  message: string;
+  data: any;
+}

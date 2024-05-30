@@ -2,7 +2,7 @@ import React from 'react';
 import HeaderBar from "@/components/customized/layout/HeaderBar";
 import RightSideBar from "@/components/customized/layout/RightSideBar";
 import {getLoggedInUser} from "@/lib/actions/user.actions";
-import {getAccount, getAccounts} from "@/lib/actions/bank.actions";
+import {getAccount, getAccounts, getBankListByUserId} from "@/lib/actions/bank.actions";
 import TotalBalanceBox from "@/components/customized/TotalBalanceBox";
 import RecentTransactions from "@/components/customized/RecentTransactions";
 
@@ -12,6 +12,8 @@ declare type SearchParamProps = {
 };
 
 const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
+  const response = await getBankListByUserId("111");
+
   const currentPage = Number(page as string) || 1;
   // get user
   const loggedInUser = await getLoggedInUser();

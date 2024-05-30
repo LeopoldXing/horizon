@@ -4,6 +4,10 @@ import {plaidClient} from "@/lib/plaid";
 import {createAdminClient} from "@/lib/appwrite";
 import {ID, Query} from "node-appwrite";
 
+
+
+/*  ----------------------------------------------------------------------------------------------------  */
+
 const getTransactions = async (accessToken: string) => {
   let hasMore = true;
   let transactions: any = [];
