@@ -4,7 +4,73 @@ import {plaidClient} from "@/lib/plaid";
 import {createAdminClient} from "@/lib/appwrite";
 import {ID, Query} from "node-appwrite";
 
+const BASE_URL = process.env.BASE_URL!.endsWith("/")
+    ? process.env.BASE_URL!.slice(0, process.env.BASE_URL!.length)
+    : process.env.BASE_URL;
 
+/**
+ * create new transaction
+ * @param transaction
+ */
+export const createTransaction = async (transaction: CreateTransactionProps) => {
+  try {
+    const response = await fetch(`${BASE_URL}/transaction`, {
+      method: "POST",
+      cache: "no-cache"
+    });
+
+    let newTransaction = {};
+    if (response.ok) {
+      const res = await response.json();
+      newTransaction = res.data;
+    }
+
+    return JSON.parse(JSON.stringify(newTransaction));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+/**
+ * get transaction list by access token
+ * @param accessToken
+ */
+export const getTransactionList = async (accessToken: string) => {
+  let res;
+  try {
+    const response = await fetch(`${BASE_URL}/transaction/list/${accessToken}`, {
+      method: "GET",
+      next: {revalidate: 5}
+    });
+    if (response.ok) {
+      res = await response.json();
+      return JSON.parse(JSON.stringify(res.data));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+/**
+ * get transaction list by bank id
+ * @param bankId
+ */
+export const getTransactionListByBankId = async (bankId: string) => {
+  let res;
+  try {
+    const response = await fetch(`${BASE_URL}/transaction/bank/${bankId}`, {
+      method: "GET",
+      next: {revalidate: 1}
+    });
+    if (response.ok) {
+      res = await response.json();
+      return JSON.parse(JSON.stringify(res.data));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 /*  ----------------------------------------------------------------------------------------------------  */
 
@@ -78,7 +144,7 @@ declare type CreateTransactionProps = {
   email: string;
 }
 
-const createTransaction = async (transaction: CreateTransactionProps) => {
+/*const createTransaction = async (transaction: CreateTransactionProps) => {
   try {
     const {database} = await createAdminClient();
 
@@ -93,6 +159,6 @@ const createTransaction = async (transaction: CreateTransactionProps) => {
   } catch (error) {
     console.log(error);
   }
-}
+}*/
 
-export {getTransactions, getTransactionsByBankId, createTransaction};
+export {getTransactions, getTransactionsByBankId};
