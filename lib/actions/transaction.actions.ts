@@ -83,6 +83,14 @@ export const getTransactionListByBankId = async (bankId: string) => {
   }
 }
 
+export const createTransfer = async ({sourceFundingSourceUrl, destinationFundingSourceUrl, amount}: {
+  sourceFundingSourceUrl: string;
+  destinationFundingSourceUrl: string;
+  amount: string;
+}) => {
+
+}
+
 /*  ----------------------------------------------------------------------------------------------------  */
 
 const getTransactions = async (accessToken: string) => {
@@ -144,22 +152,5 @@ const getTransactionsByBankId = async (bankId: string) => {
     console.log(error);
   }
 }
-
-/*const createTransaction = async (transaction: CreateTransactionProps) => {
-  try {
-    const {database} = await createAdminClient();
-
-    const newTransaction = await database.createDocument(
-        process.env.APPWRITE_DATABASE_ID!,
-        process.env.APPWRITE_TRANSACTION_COLLECTION_ID!,
-        ID.unique(),
-        {channel: 'online', category: 'Transfer', ...transaction}
-    )
-
-    return JSON.parse(JSON.stringify(newTransaction));
-  } catch (error) {
-    console.log(error);
-  }
-}*/
 
 export {getTransactions, getTransactionsByBankId};

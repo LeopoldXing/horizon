@@ -2,8 +2,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Button} from "@/components/ui/button";
 import {PlaidLinkOnSuccess, PlaidLinkOptions, usePlaidLink} from "react-plaid-link";
 import {useRouter} from "next/navigation";
-import {exchangePublicToken, generateLinkToken} from "@/lib/actions/user.actions";
 import Image from "next/image";
+import {exchangePublicToken, generateLinkToken} from "@/lib/actions/plaid.actions";
 
 declare type PlaidLinkProps = {
   user: User;
