@@ -64,7 +64,7 @@ const AuthForm = ({type}: { type: string }) => {
         const userData = {
           firstName: data.firstname!,
           lastName: data.lastname!,
-          address1: data.address!,
+          address: data.address!,
           city: data.city!,
           state: data.state!,
           postalCode: data.postal!,
@@ -76,10 +76,7 @@ const AuthForm = ({type}: { type: string }) => {
         const newUser = await signUp(userData);
         setUser(newUser);
       } else if (type === "sign-in") {
-        const response = await signIn({
-          email: data.email,
-          password: data.password
-        });
+        const response = await signIn(data.email, data.password);
         if (response) router.push("/");
       }
     } catch (err) {

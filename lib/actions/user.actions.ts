@@ -1,27 +1,33 @@
 "use server";
 
-import {createSessionClient} from "@/lib/appwrite";
 import {cookies} from "next/headers";
 
 const BASE_URL = process.env.BASE_URL!.endsWith("/")
     ? process.env.BASE_URL!.slice(0, process.env.BASE_URL!.length)
     : process.env.BASE_URL;
 
-
-export const getUserInfoById = async (userId: string): Promise<any> => {
+/**
+ * get user info by token
+ */
+export const getUserInfo = async (): Promise<any> => {
   let res = null;
+  if(!cookies().has("horizon-token")){
+    return null;
+  }
+  const token = cookies().get("horizon-token")!.value;
   try {
-    const response = await fetch(`${BASE_URL}/user/${userId}`, {
+    const response = await fetch(`${BASE_URL}/user`, {
       method: "GET",
+      body: JSON.stringify({token: token}),
       next: {revalidate: 1}
     });
     if (response.ok) {
       res = await response.json();
-      return JSON.parse(JSON.stringify(res.data));
     }
   } catch (err) {
     console.error(err);
   }
+  return JSON.parse(JSON.stringify(res));
 }
 
 /**
@@ -41,6 +47,7 @@ export const signIn = async (email: string, password: string): Promise<any> => {
       const res = await response.json();
       const data = res.data;
       user = data.user;
+      cookies().set("horizon-token", data.token, {path: "/", httpOnly: true, sameSite: "strict", secure: true});
     }
   } catch (err) {
     console.error(err);
@@ -61,7 +68,7 @@ export const signOut = async (userId: string): Promise<any> => {
     });
     if (response.ok) {
       res = true;
-      cookies().delete("horizon-session");
+      cookies().delete("horizon-token");
     }
   } catch (err) {
     console.error("Error logging out signing out", err);
@@ -100,7 +107,7 @@ export const signUp = async (data: {
   } = data;
   let newUser;
   try {
-    const response = await fetch(`${BASE_URL}/user/signup`, {
+    const response = await fetch(`${BASE_URL}/user/sign-up`, {
       method: "POST",
       body: JSON.stringify({
         firstName: firstName,
@@ -131,15 +138,11 @@ export const signUp = async (data: {
 const getLoggedInUser = async (): Promise<User> => {
   let res = null;
   try {
-    const {account} = await createSessionClient();
-    const appwriteAccount = await account.get();
-    const userId = appwriteAccount.$id;
-    const user = await getUserInfoById(userId);
-    user.name = `${user.firstName} ${user.lastName}`;
-    res = JSON.parse(JSON.stringify(user));
+    res = await getUserInfo();
   } catch (error) {
+    console.error(error);
   }
-  return res;
+  return JSON.parse(JSON.stringify(res));
 }
 
 export {getLoggedInUser};
