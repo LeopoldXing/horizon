@@ -12,7 +12,7 @@ const BASE_URL = process.env.BASE_URL!.endsWith("/")
 export const getUserInfo = async (): Promise<any> => {
   let res = null;
   if(!cookies().has("horizon-token")){
-    return null;
+    return "";
   }
   const token = cookies().get("horizon-token")!.value;
   try {
@@ -127,6 +127,7 @@ export const signUp = async (data: {
       const res = await response.json();
       const data = res.data;
       newUser = data.user;
+      cookies().set("horizon-token", data.token, {path: "/", httpOnly: true, sameSite: "strict", secure: true});
     }
   } catch (err) {
     console.error("Error logging in signing up", err);
