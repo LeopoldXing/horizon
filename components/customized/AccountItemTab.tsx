@@ -6,15 +6,15 @@ import {cn, formUrlQuery} from "@/lib/utils";
 
 declare type BankTabItemProps = {
   account: Account;
-  appwriteItemId?: string;
+  currentAccountId: string;
 }
-export const BankTabItem = ({account, appwriteItemId}: BankTabItemProps) => {
+export const AccountItemTab = ({account, currentAccountId}: BankTabItemProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const isActive = appwriteItemId === account?.appwriteItemId;
+  const isActive = account.id === currentAccountId;
 
   const handleBankChange = () => {
-    const newUrl = formUrlQuery({params: searchParams.toString(), key: "id", value: account?.appwriteItemId});
+    const newUrl = formUrlQuery({params: searchParams.toString(), key: "id", value: account?.id});
     router.push(newUrl, {scroll: false});
   };
 

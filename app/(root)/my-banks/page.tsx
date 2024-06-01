@@ -1,12 +1,12 @@
 import React from 'react';
-import {getAccounts} from "@/lib/actions/bank.actions";
 import {getLoggedInUser} from "@/lib/actions/user.actions";
 import HeaderBar from "@/components/customized/layout/HeaderBar";
 import BankCard from "@/components/customized/BankCard";
+import {getAccountList} from "@/lib/actions/bank.actions";
 
 const MyBanksPage = async () => {
   const loggedInUser = await getLoggedInUser();
-  const accounts = await getAccounts(loggedInUser.$id)
+  const accounts = await getAccountList();
   return (
       <section className='flex'>
         <div className="w-full max-h-screen h-screen p-8 flex flex-col bg-gray-25 xl:py-12">
@@ -17,9 +17,9 @@ const MyBanksPage = async () => {
               Your cards
             </h2>
             <div className="flex flex-wrap gap-6">
-              {Array.isArray(accounts?.data) && accounts.data.map((account: Account) => (
+              {Array.isArray(accounts) && accounts.map((account: Account) => (
                   <div key={account.id}>
-                  <BankCard account={account} userName={loggedInUser?.name} showBalance={true}/></div>
+                    <BankCard account={account} userName={loggedInUser?.name} showBalance={true}/></div>
               ))}
             </div>
           </div>

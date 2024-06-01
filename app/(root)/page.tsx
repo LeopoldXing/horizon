@@ -2,7 +2,12 @@ import React from 'react';
 import HeaderBar from "@/components/customized/layout/HeaderBar";
 import RightSideBar from "@/components/customized/layout/RightSideBar";
 import {getLoggedInUser} from "@/lib/actions/user.actions";
-import {getAccount, getAccounts, getBankListByUserId} from "@/lib/actions/bank.actions";
+import {
+  getAccountList,
+  getBankList,
+  getTransactionListByAccountId,
+  getUserBankQuantity, getUserCurrentBalance
+} from "@/lib/actions/bank.actions";
 import TotalBalanceBox from "@/components/customized/TotalBalanceBox";
 import RecentTransactions from "@/components/customized/RecentTransactions";
 
@@ -12,18 +17,22 @@ declare type SearchParamProps = {
 };
 
 const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
-  const response = await getBankListByUserId("111");
+  const response = await getBankList();
 
   const currentPage = Number(page as string) || 1;
   // get user
   const loggedInUser = await getLoggedInUser();
 
   // get accounts
-  const accountListData = await getAccounts(loggedInUser.$id);
-  if (!accountListData) return;
-  const accountList = accountListData.data;
-  const appwriteItemId = (id as string) || (accountList[0]?.appwriteItemId);
-  const account = await getAccount(appwriteItemId);
+  const accountList = await getAccountList();
+  if (!accountList) return;
+  const transactionList = await getTransactionListByAccountId(accountList[0].accountId);
+
+  // get total bank number
+  const totalBankNumber = await getUserBankQuantity();
+
+  // get total current balance
+  const totalCurrentBalance = await getUserCurrentBalance();
 
   return (
       /*  home  */
@@ -34,15 +43,15 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
           <div className="flex flex-col justify-between gap-8">
             <HeaderBar type="greeting" title="Welcome" user={loggedInUser || "guest"}
                        subText="Access and manage your accounts and transactions efficiently"/>
-            <TotalBalanceBox accounts={accountList} totalBanks={accountListData.totalBanks}
-                             totalCurrentBalance={accountListData.totalCurrentBalance}/>
+            <TotalBalanceBox accounts={accountList} totalBanks={totalBankNumber}
+                             totalCurrentBalance={totalCurrentBalance}/>
           </div>
 
-          <RecentTransactions accountList={accountList} transactionList={account.transactionList} appwriteItemId={appwriteItemId}
-                              currentPage={currentPage}/>
+          <RecentTransactions accountList={accountList} transactionList={transactionList} currentPage={currentPage}
+                              currentAccountId={accountList[0].id}/>
         </div>
 
-        <RightSideBar user={loggedInUser} bankList={accountList?.slice(0, 2)} transactionList={account.transactionList}/>
+        <RightSideBar user={loggedInUser} bankList={accountList?.slice(0, 2)} transactionList={transactionList}/>
       </div>
   );
 };

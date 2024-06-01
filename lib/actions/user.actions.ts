@@ -18,7 +18,9 @@ export const getUserInfo = async (): Promise<any> => {
   try {
     const response = await fetch(`${BASE_URL}/user`, {
       method: "GET",
-      body: JSON.stringify({token: token}),
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       next: {revalidate: 1}
     });
     if (response.ok) {

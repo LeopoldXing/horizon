@@ -6,7 +6,7 @@ import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {decryptId} from "@/lib/utils";
-import {getBank, getBankByAccountId} from "@/lib/actions/bank.actions";
+import {getBankByAccountId, getBankInfoById} from "@/lib/actions/bank.actions";
 import {createTransaction, createTransfer} from "@/lib/actions/transaction.actions";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {BankDropdown} from "@/components/customized/BankDropdown";
@@ -44,7 +44,7 @@ const PaymentTransferForm = ({accountList}: { accountList: Array<Account> }) => 
     try {
       const receiverAccountId = decryptId(data.shareableId);
       const receiverBank = await getBankByAccountId(receiverAccountId);
-      const senderBank = await getBank(data.senderBank);
+      const senderBank = await getBankInfoById(data.senderBank);
 
       const transferParams = {
         sourceFundingSourceUrl: senderBank.fundingSourceUrl,

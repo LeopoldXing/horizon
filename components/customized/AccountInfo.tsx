@@ -6,23 +6,23 @@ import {cn, formUrlQuery, formatAmount} from "@/lib/utils";
 
 declare type BankInfoProps = {
   account: Account;
-  appwriteItemId?: string;
   type: "full" | "card";
+  currentAccountId: string;
 }
-const BankInfo = ({account, appwriteItemId, type}: BankInfoProps) => {
+const AccountInfo = ({account, type, currentAccountId}: BankInfoProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const isActive = appwriteItemId === account?.appwriteItemId;
 
   const handleBankChange = () => {
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
       key: "id",
-      value: account?.appwriteItemId,
+      value: account?.id,
     });
     router.push(newUrl, {scroll: false});
   };
+
+  const isActive = account.id === currentAccountId;
 
   const getAccountTypeColors = (type: AccountTypes) => {
     switch (type) {
@@ -83,4 +83,4 @@ const BankInfo = ({account, appwriteItemId, type}: BankInfoProps) => {
   );
 };
 
-export default BankInfo;
+export default AccountInfo;
