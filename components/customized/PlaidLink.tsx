@@ -12,24 +12,24 @@ declare type PlaidLinkProps = {
 }
 
 const PlaidLink = ({user, variant}: PlaidLinkProps) => {
-  const [token, setToken] = useState("");
+  const [linkToken, setLinkToken] = useState("");
   const router = useRouter();
 
   // generate new link token
   useEffect(() => {
     const getLinkToken = async () => {
       const data = await generateLinkToken(user);
-      setToken(data?.link_token);
+      setLinkToken(data?.link_token);
     }
     getLinkToken();
   }, [user]);
 
   const onSuccess = useCallback<PlaidLinkOnSuccess>(async (publicToken: string) => {
-    await exchangePublicToken({publicToken, user});
+    await exchangePublicToken(publicToken);
     router.push("/");
   }, [router, user])
 
-  const config: PlaidLinkOptions = {token, onSuccess};
+  const config: PlaidLinkOptions = {token: linkToken, onSuccess};
 
   const {open, ready} = usePlaidLink(config);
 
