@@ -7,7 +7,7 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {decryptId} from "@/lib/utils";
 import {getBankByAccountId, getBankInfoById} from "@/lib/actions/bank.actions";
-import {createTransaction, createTransfer} from "@/lib/actions/transaction.actions";
+import {createTransfer} from "@/lib/actions/transaction.actions";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {BankDropdown} from "@/components/customized/BankDropdown";
 import {Textarea} from "@/components/ui/textarea";
@@ -47,31 +47,23 @@ const PaymentTransferForm = ({accountList}: { accountList: Array<Account> }) => 
       const senderBank = await getBankInfoById(data.senderBank);
 
       const transferParams = {
+        name: data.name,
+        amount: data.amount,
+        senderId: senderBank.userId.$id,
+        senderBankId: senderBank.$id,
+        receiverId: receiverBank.userId.$id,
+        receiverBankId: receiverBank.$id,
+        email: data.email,
         sourceFundingSourceUrl: senderBank.fundingSourceUrl,
         destinationFundingSourceUrl: receiverBank.fundingSourceUrl,
-        amount: data.amount,
       };
       // create transfer
-      const transfer = await createTransfer(transferParams);
+      const res = await createTransfer(transferParams);
 
       // create transfer transaction
-      if (transfer) {
-        const transaction = {
-          name: data.name,
-          amount: data.amount,
-          senderId: senderBank.userId.$id,
-          senderBankId: senderBank.$id,
-          receiverId: receiverBank.userId.$id,
-          receiverBankId: receiverBank.$id,
-          email: data.email
-        };
-
-        const newTransaction = await createTransaction(transaction);
-
-        if (newTransaction) {
-          form.reset();
-          router.push("/");
-        }
+      if (res) {
+        form.reset();
+        router.push("/");
       }
     } catch (error) {
       console.error("Submitting create transfer request failed: ", error);

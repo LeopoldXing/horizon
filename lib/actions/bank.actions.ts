@@ -139,30 +139,6 @@ export const getUserCurrentBalance = async (): Promise<any> => {
   return res;
 }
 
-/**
- * get user's transaction list
- */
-export const getTransactionList = async (): Promise<any> => {
-  let res;
-  try {
-    if (cookies().has("horizon-token")) {
-      const token = cookies().get("horizon-token")!.value;
-      const response = await fetch(`${BASE_URL}/user/transaction-list`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        next: {revalidate: 1}
-      });
-      if (response.ok) {
-        res = await response.json();
-      }
-    }
-  } catch (err) {
-    console.error(err);
-  }
-  return JSON.parse(JSON.stringify(res.data));
-}
 
 /**
  * get bank details by id
