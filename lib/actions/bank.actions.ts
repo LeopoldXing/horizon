@@ -2,10 +2,10 @@
 
 import {cookies} from "next/headers";
 
-const BASE_URL = process.env.BASE_URL!.endsWith("/")
+let BASE_URL = process.env.BASE_URL!.endsWith("/")
     ? process.env.BASE_URL!.slice(0, process.env.BASE_URL!.length)
     : process.env.BASE_URL;
-
+BASE_URL += "/api/v1";
 
 /**
  * find a bank list related to the userId
