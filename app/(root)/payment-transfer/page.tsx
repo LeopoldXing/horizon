@@ -1,12 +1,10 @@
 import React from 'react';
-import {getAccounts} from "@/lib/actions/bank.actions";
-import {getLoggedInUser} from "@/lib/actions/user.actions";
+import {getAccountList} from "@/lib/actions/bank.actions";
 import HeaderBar from "@/components/customized/layout/HeaderBar";
 import PaymentTransferForm from "@/components/customized/form/PaymentTransferForm";
 
 const TransactionHistoryPage = async () => {
-  const loggedInUser = await getLoggedInUser();
-  const accountList = await getAccounts(loggedInUser.$id)
+  const accountList = await getAccountList();
 
   if (!accountList) return;
 

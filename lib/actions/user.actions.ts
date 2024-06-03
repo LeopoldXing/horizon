@@ -2,17 +2,14 @@
 
 import {cookies} from "next/headers";
 
-let BASE_URL = process.env.BASE_URL!.endsWith("/")
-    ? process.env.BASE_URL!.slice(0, process.env.BASE_URL!.length)
-    : process.env.BASE_URL;
-BASE_URL += "/api/v1";
+const BASE_URL = process.env.BASE_URL + "/api/v1";
 
 /**
  * get user info by token
  */
 export const getUserInfo = async (): Promise<any> => {
   let res = null;
-  if(!cookies().has("horizon-token")){
+  if (!cookies().has("horizon-token")) {
     return "";
   }
   const token = cookies().get("horizon-token")!.value;
@@ -62,16 +59,21 @@ export const signIn = async (email: string, password: string): Promise<any> => {
  * user logout
  * @param userId
  */
-export const signOut = async (userId: string): Promise<any> => {
+export const signOut = async (): Promise<any> => {
   let res = false;
   try {
-    const response = await fetch(`${BASE_URL}/user/sign-out`, {
-      method: "POST",
-      body: JSON.stringify({userId: userId})
-    });
-    if (response.ok) {
-      res = true;
-      cookies().delete("horizon-token");
+    if (cookies().has("horizon-token")) {
+      const token = cookies().get("horizon-token")!.value;
+      const response = await fetch(`${BASE_URL}/user/sign-out`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        res = true;
+        cookies().delete("horizon-token");
+      }
     }
   } catch (err) {
     console.error("Error logging out signing out", err);

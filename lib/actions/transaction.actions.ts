@@ -2,10 +2,7 @@
 
 import {cookies} from "next/headers";
 
-let BASE_URL = process.env.BASE_URL!.endsWith("/")
-    ? process.env.BASE_URL!.slice(0, process.env.BASE_URL!.length)
-    : process.env.BASE_URL;
-BASE_URL += "/api/v1";
+const BASE_URL = process.env.BASE_URL + "/api/v1";
 
 declare type createTransferProps = {
   name: string;
