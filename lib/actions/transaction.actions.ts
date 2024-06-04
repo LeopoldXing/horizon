@@ -24,7 +24,7 @@ export const createTransfer = async (transferData: createTransferProps): Promise
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         body: JSON.stringify(transferData),
         cache: "no-cache"
@@ -54,7 +54,7 @@ export const getTransactionListByUser = async (): Promise<any> => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 1}
       });
@@ -82,7 +82,7 @@ export const getTransactionListByAccessToken = async (accessToken: string) => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 5}
       });
@@ -109,7 +109,7 @@ export const getTransactionListByBankId = async (bankId: string) => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 1}
       });

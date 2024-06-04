@@ -18,7 +18,7 @@ export const getUserInfo = async (): Promise<any> => {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json;charset=UTF-8"
       },
       next: {revalidate: 1}
     });
@@ -42,7 +42,7 @@ export const signIn = async (email: string, password: string): Promise<any> => {
     const response = await fetch(`${BASE_URL}/user/sign-in`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json;charset=UTF-8"
       },
       body: JSON.stringify({email, password: password}),
       next: {revalidate: 5}
@@ -72,7 +72,7 @@ export const signOut = async (): Promise<any> => {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         }
       });
       if (response.ok) {
@@ -120,7 +120,7 @@ export const signUp = async (data: {
     const response = await fetch(`${BASE_URL}/user/sign-up`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json;charset=UTF-8"
       },
       body: JSON.stringify({
         firstName: firstName,

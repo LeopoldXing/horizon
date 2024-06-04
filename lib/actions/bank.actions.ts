@@ -16,7 +16,7 @@ export const getBankList = async (): Promise<any> => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 1}
       });
@@ -45,7 +45,7 @@ export const getAccountList = async (): Promise<any> => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 1}
       });
@@ -73,7 +73,7 @@ export const getBankByAccountId = async (accountId: string): Promise<any> => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 1}
       });
@@ -99,7 +99,7 @@ export const getUserBankQuantity = async (): Promise<any> => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 5}
       });
@@ -126,7 +126,7 @@ export const getUserCurrentBalance = async (): Promise<any> => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 5}
       });
@@ -155,7 +155,7 @@ export const getBankInfoById = async (bankId: string) => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 1}
       });
@@ -179,7 +179,7 @@ export const getTransactionListByAccountId = async (accountId: string) => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 1}
       });
@@ -203,7 +203,7 @@ export const getAccountById = async (accountId: string) => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         next: {revalidate: 1}
       });
