@@ -139,8 +139,7 @@ export const signUp = async (data: {
     if (response) {
       const res = await response.json();
       newUser = res.data;
-      console.log(newUser);
-      /*cookies().set("horizon-token", data.token, {path: "/", httpOnly: true, sameSite: "strict", secure: true});*/
+      cookies().set("horizon-token", res.data.token, {path: "/", httpOnly: true, sameSite: "strict", secure: true});
     }
   } catch (err) {
     console.error("Error logging in signing up", err);

@@ -23,7 +23,8 @@ export const exchangePublicToken = async (publicToken: string) => {
       });
       if(response.ok) {
         const responseData = await response.json();
-        const accessToken = responseData.data;
+        console.log("responseData");
+        console.log(responseData);
         // Revalidate the path to reflect the changes
         revalidatePath("/");
       }
