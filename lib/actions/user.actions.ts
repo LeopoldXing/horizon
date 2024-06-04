@@ -2,7 +2,7 @@
 
 import {cookies} from "next/headers";
 
-const BASE_URL = process.env.BASE_URL + "/api/v1";
+const BASE_URL = process.env.BASE_URL;
 
 /**
  * get user info by token
@@ -17,7 +17,8 @@ export const getUserInfo = async (): Promise<any> => {
     const response = await fetch(`${BASE_URL}/user`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
       },
       next: {revalidate: 1}
     });
@@ -40,6 +41,9 @@ export const signIn = async (email: string, password: string): Promise<any> => {
   try {
     const response = await fetch(`${BASE_URL}/user/sign-in`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({email, password: password}),
       next: {revalidate: 5}
     });
@@ -67,7 +71,8 @@ export const signOut = async (): Promise<any> => {
       const response = await fetch(`${BASE_URL}/user/sign-out`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         }
       });
       if (response.ok) {
@@ -114,6 +119,9 @@ export const signUp = async (data: {
   try {
     const response = await fetch(`${BASE_URL}/user/sign-up`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         firstName: firstName,
         lastName: lastName,
@@ -128,11 +136,11 @@ export const signUp = async (data: {
       }),
       cache: "no-cache"
     });
-    if (response.ok) {
+    if (response) {
       const res = await response.json();
-      const data = res.data;
-      newUser = data.user;
-      cookies().set("horizon-token", data.token, {path: "/", httpOnly: true, sameSite: "strict", secure: true});
+      newUser = res.data;
+      console.log(newUser);
+      /*cookies().set("horizon-token", data.token, {path: "/", httpOnly: true, sameSite: "strict", secure: true});*/
     }
   } catch (err) {
     console.error("Error logging in signing up", err);

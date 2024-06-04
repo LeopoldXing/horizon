@@ -2,7 +2,7 @@
 
 import {cookies} from "next/headers";
 
-const BASE_URL = process.env.BASE_URL + "/api/v1";
+const BASE_URL = process.env.BASE_URL;
 
 declare type createTransferProps = {
   name: string;
@@ -23,7 +23,8 @@ export const createTransfer = async (transferData: createTransferProps): Promise
       const response = await fetch(`${BASE_URL}/transaction`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(transferData),
         cache: "no-cache"
@@ -52,7 +53,8 @@ export const getTransactionListByUser = async (): Promise<any> => {
       const response = await fetch(`${BASE_URL}/user/transaction/list`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         },
         next: {revalidate: 1}
       });
@@ -79,7 +81,8 @@ export const getTransactionListByAccessToken = async (accessToken: string) => {
       const response = await fetch(`${BASE_URL}/transaction/list/${accessToken}`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         },
         next: {revalidate: 5}
       });
@@ -105,7 +108,8 @@ export const getTransactionListByBankId = async (bankId: string) => {
       const response = await fetch(`${BASE_URL}/transaction/bank/${bankId}`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         },
         next: {revalidate: 1}
       });

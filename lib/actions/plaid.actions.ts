@@ -5,7 +5,7 @@ import {CountryCode, Products} from "plaid";
 import {cookies} from "next/headers";
 import {revalidatePath} from "next/cache";
 
-const BASE_URL = process.env.BASE_URL + "/api/v1";
+const BASE_URL = process.env.BASE_URL;
 
 export const exchangePublicToken = async (publicToken: string) => {
   try {
@@ -14,7 +14,8 @@ export const exchangePublicToken = async (publicToken: string) => {
       const response = await fetch(`${BASE_URL}/plaid/exchange-public-token`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         },
         body: publicToken as string,
         next: {revalidate: 5},
