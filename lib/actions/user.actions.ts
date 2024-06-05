@@ -151,7 +151,10 @@ export const signUp = async (data: {
 const getLoggedInUser = async (): Promise<User> => {
   let res = null;
   try {
-    res = await getUserInfo();
+    const response = await getUserInfo();
+    if (response && response.statusCode == 200) {
+      res = response.data;
+    }
   } catch (error) {
     console.error(error);
   }

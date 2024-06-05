@@ -11,23 +11,16 @@ export const exchangePublicToken = async (publicToken: string) => {
   try {
     if (cookies().has("horizon-token")) {
       const token = cookies().get("horizon-token")!.value;
-      const response = await fetch(`${BASE_URL}/plaid/exchange-public-token`, {
+      await fetch(`${BASE_URL}/plaid/exchange-public-token`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json;charset=UTF-8"
+          Authorization: `Bearer ${token}`
         },
         body: publicToken as string,
         next: {revalidate: 5},
         cache: "no-cache"
       });
-      if(response.ok) {
-        const responseData = await response.json();
-        console.log("responseData");
-        console.log(responseData);
-        // Revalidate the path to reflect the changes
-        revalidatePath("/");
-      }
+      revalidatePath("/");
     }
   } catch (err) {
     console.error("Error exchange public token", err);

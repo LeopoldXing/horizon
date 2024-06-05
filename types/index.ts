@@ -1,5 +1,6 @@
 declare interface User {
   $id: string;
+  id?: string;
   userId: string;
   email: string;
   dwollaCustomerUrl: string;
