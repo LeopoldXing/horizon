@@ -161,4 +161,20 @@ const getLoggedInUser = async (): Promise<User> => {
   return JSON.parse(JSON.stringify(res));
 }
 
-export {getLoggedInUser};
+const initializeAccount = async () => {
+  try {
+    const token = cookies().get("horizon-token")!.value;
+    const response = await fetch(`${BASE_URL}/user/init`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      cache: "no-cache"
+    });
+    console.log(response);
+  }catch (err) {
+    console.error(err);
+  }
+}
+
+export {getLoggedInUser, initializeAccount};

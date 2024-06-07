@@ -8,14 +8,12 @@ const TransactionHistoryPage = async () => {
 
   if (!accountList) return;
 
-  const accountsData = accountList?.data;
-
   return (
       <section className="p-8 flex flex-col bg-gray-25 no-scrollbar overflow-y-scroll md:max-h-screen xl:py-12">
         <HeaderBar title="Payment Transfer" subText="Please provide any specific details or notes related to the payment transfer"/>
 
         <section className="size-full pt-5">
-          <PaymentTransferForm accountList={accountsData}/>
+          <PaymentTransferForm accountList={accountList}/>
         </section>
       </section>
   )

@@ -4,6 +4,7 @@ import {PlaidLinkOnSuccess, PlaidLinkOptions, usePlaidLink} from "react-plaid-li
 import {useRouter} from "next/navigation";
 import Image from "next/image";
 import {exchangePublicToken, generateLinkToken} from "@/lib/actions/plaid.actions";
+import {initializeAccount} from "@/lib/actions/user.actions";
 
 declare type PlaidLinkProps = {
   user: User;
@@ -26,7 +27,8 @@ const PlaidLink = ({user, variant}: PlaidLinkProps) => {
 
   const onSuccess = useCallback<PlaidLinkOnSuccess>(async (publicToken: string) => {
     await exchangePublicToken(publicToken);
-    router.push("/");
+    await initializeAccount();
+    router.push(`/`);
   }, [router, user])
 
   const config: PlaidLinkOptions = {token: linkToken, onSuccess};

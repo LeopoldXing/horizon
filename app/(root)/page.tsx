@@ -1,7 +1,7 @@
 import React from 'react';
 import HeaderBar from "@/components/customized/layout/HeaderBar";
 import RightSideBar from "@/components/customized/layout/RightSideBar";
-import {getLoggedInUser} from "@/lib/actions/user.actions";
+import {getLoggedInUser, initializeAccount} from "@/lib/actions/user.actions";
 import {
   getAccountList,
   getBankList,
@@ -25,7 +25,9 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
 
   // get accounts
   const accountList = await getAccountList();
-  if (!accountList) return;
+  console.log("rootpage -> accountList")
+  console.log(accountList);
+  if (!accountList || !Array.isArray(accountList) || accountList.length == 0) return;
   const transactionList = await getTransactionListByAccountId(accountList[0].accountId);
 
   // get total bank number
@@ -33,6 +35,15 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
 
   // get total current balance
   const totalCurrentBalance = await getUserCurrentBalance();
+
+  console.log("rootpage -> accountList")
+  console.log(accountList);
+  console.log("rootpage -> transactionList")
+  console.log(transactionList);
+  console.log("rootpage -> totalBankNumber")
+  console.log(totalBankNumber);
+  console.log("rootpage -> totalCurrentBalance")
+  console.log(totalCurrentBalance);
 
   return (
       /*  home  */
