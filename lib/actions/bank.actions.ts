@@ -175,7 +175,7 @@ export const getTransactionListByAccountId = async (accountId: string) => {
   try {
     if (cookies().has("horizon-token")) {
       const token = cookies().get("horizon-token")!.value;
-      const response = await fetch(`${BASE_URL}/transaction/${accountId}`, {
+      const response = await fetch(`${BASE_URL}/transaction/account/${accountId}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -25,10 +25,10 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
 
   // get accounts
   const accountList = await getAccountList();
+  if (!accountList || !Array.isArray(accountList) || accountList.length == 0) return;
   console.log("rootpage -> accountList")
   console.log(accountList);
-  if (!accountList || !Array.isArray(accountList) || accountList.length == 0) return;
-  const transactionList = await getTransactionListByAccountId(accountList[0].accountId);
+  const transactionList = await getTransactionListByAccountId(accountList[0].id);
 
   // get total bank number
   const totalBankNumber = await getUserBankQuantity();
