@@ -17,8 +17,6 @@ declare type SearchParamProps = {
 };
 
 const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
-  const response = await getBankList();
-
   const currentPage = Number(page as string) || 1;
   // get user
   const loggedInUser = await getLoggedInUser();
@@ -26,8 +24,6 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
   // get accounts
   const accountList = await getAccountList();
   if (!accountList || !Array.isArray(accountList) || accountList.length == 0) return;
-  console.log("rootpage -> accountList")
-  console.log(accountList);
   const transactionList = await getTransactionListByAccountId(accountList[0].id);
 
   // get total bank number
@@ -35,15 +31,6 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
 
   // get total current balance
   const totalCurrentBalance = await getUserCurrentBalance();
-
-  console.log("rootpage -> accountList")
-  console.log(accountList);
-  console.log("rootpage -> transactionList")
-  console.log(transactionList);
-  console.log("rootpage -> totalBankNumber")
-  console.log(totalBankNumber);
-  console.log("rootpage -> totalCurrentBalance")
-  console.log(totalCurrentBalance);
 
   return (
       /*  home  */

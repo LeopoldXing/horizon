@@ -14,21 +14,21 @@ export const getUserInfo = async (): Promise<any> => {
   }
   const token = cookies().get("horizon-token")!.value;
   try {
-    const response = await fetch(`${BASE_URL}/user`, {
+    const response = await fetch(`${BASE_URL}/user/info`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json;charset=UTF-8"
       },
-      next: {revalidate: 1}
+      cache: "no-cache"
     });
     if (response.ok) {
       res = await response.json();
+      return JSON.parse(JSON.stringify(res));
     }
   } catch (err) {
     console.error(err);
   }
-  return JSON.parse(JSON.stringify(res));
 }
 
 /**
@@ -152,7 +152,7 @@ const getLoggedInUser = async (): Promise<User> => {
   let res = null;
   try {
     const response = await getUserInfo();
-    if (response && response.statusCode == 200) {
+    if (response) {
       res = response.data;
     }
   } catch (error) {
