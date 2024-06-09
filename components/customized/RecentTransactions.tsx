@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from "next/link";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {AccountItemTab} from "@/components/customized/AccountItemTab";
@@ -32,10 +32,10 @@ const RecentTransactions = async ({accountList, currentPage = 1, currentAccountI
             View all
           </Link>
         </header>
-        <Tabs defaultValue="account" className="w-full">
+        <Tabs defaultValue={currentAccountId} className="w-full">
           <TabsList className="w-full mb-8 flex flex-nowrap custom-scrollbar">
             {accountList.map((account: Account) => (
-                <TabsTrigger key={account.id} value={currentAccountId}>
+                <TabsTrigger key={account.id} value={account.id}>
                   <AccountItemTab account={account} key={account.id} currentAccountId={currentAccountId}/>
                 </TabsTrigger>
             ))}

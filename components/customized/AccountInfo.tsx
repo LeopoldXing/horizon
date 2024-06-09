@@ -22,7 +22,7 @@ const AccountInfo = ({account, type, currentAccountId}: BankInfoProps) => {
     router.push(newUrl, {scroll: false});
   };
 
-  const isActive = account.id === currentAccountId;
+  const isActive = account.id == currentAccountId;
 
   const getAccountTypeColors = (type: AccountTypes) => {
     switch (type) {

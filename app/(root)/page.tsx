@@ -22,7 +22,7 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
   const transactionList = accountList[0].transactionList;
 
   // get current accountId
-  const currentAccountId = accountList[0].id;
+  const currentAccountId = id ? id : accountList[0].id;
 
   // get total bank number
   const totalBankNumber = await getUserBankQuantity();

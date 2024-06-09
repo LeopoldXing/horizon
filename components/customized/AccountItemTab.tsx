@@ -11,7 +11,7 @@ declare type BankTabItemProps = {
 export const AccountItemTab = ({account, currentAccountId}: BankTabItemProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const isActive = account.id === currentAccountId;
+  const isActive = account.id == currentAccountId;
 
   const handleBankChange = () => {
     const newUrl = formUrlQuery({params: searchParams.toString(), key: "id", value: account?.id});
