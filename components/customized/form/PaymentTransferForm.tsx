@@ -6,7 +6,7 @@ import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {decryptId} from "@/lib/utils";
-import {getBankByAccountId, getBankInfoById} from "@/lib/actions/bank.actions";
+import {getAccountById, getBankByAccountId} from "@/lib/actions/bank.actions";
 import {createTransfer} from "@/lib/actions/transaction.actions";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {BankDropdown} from "@/components/customized/BankDropdown";
@@ -19,7 +19,7 @@ const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   name: z.string().min(4, "Transfer note is too short"),
   amount: z.string().min(4, "Amount is too short"),
-  senderBank: z.string().min(4, "Please select a valid bank account"),
+  senderBank: z.string().min(0, "Please select a valid bank account"),
   shareableId: z.string().min(8, "Please select a valid shareable Id"),
 });
 
@@ -41,22 +41,33 @@ const PaymentTransferForm = ({accountList}: { accountList: Array<Account> }) => 
   const submit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
 
+    console.log("paymenttransferform -> onsubmit -> data.senderBank")
+    console.log(data.senderBank)
+
     try {
       const receiverAccountId = decryptId(data.shareableId);
       const receiverBank = await getBankByAccountId(receiverAccountId);
-      const senderBank = await getBankInfoById(data.senderBank);
+      console.log("paymenttransferform -> onsubmit -> receiverAccountId")
+      console.log(receiverAccountId)
+      const senderAccount = await getAccountById(data.senderBank);
+
+      console.log("paymenttransferform -> onsubmit -> senderAccount")
+      console.log(senderAccount)
 
       const transferParams = {
         name: data.name,
         amount: data.amount,
-        senderId: senderBank.userId.$id,
-        senderBankId: senderBank.$id,
+        senderId: senderAccount.userId.$id,
+        senderBankId: senderAccount.$id,
         receiverId: receiverBank.userId.$id,
         receiverBankId: receiverBank.$id,
         email: data.email,
-        sourceFundingSourceUrl: senderBank.fundingSourceUrl,
+        sourceFundingSourceUrl: senderAccount.fundingSourceUrl,
         destinationFundingSourceUrl: receiverBank.fundingSourceUrl,
       };
+
+      console.log("paymenttransferform -> onsubmit -> transferParams")
+      console.log(transferParams)
       // create transfer
       const res = await createTransfer(transferParams);
 

@@ -171,7 +171,6 @@ const initializeAccount = async () => {
       },
       cache: "no-cache"
     });
-    console.log(response);
   }catch (err) {
     console.error(err);
   }

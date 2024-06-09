@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Link from "next/link";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {AccountItemTab} from "@/components/customized/AccountItemTab";
@@ -13,9 +13,6 @@ declare type RecentTransactionsProps = {
   currentAccountId: string;
 }
 const RecentTransactions = async ({accountList, currentPage = 1, currentAccountId}: RecentTransactionsProps) => {
-  console.log("recentTransaction -> currentAccountId", currentAccountId);
-  console.log("recentTransaction -> accountList");
-  console.log(accountList);
   const transactionList = await getTransactionListByAccountId(currentAccountId);
   const rowsPerPage = 10;
   const totalPages = Math.ceil(transactionList?.length / rowsPerPage);

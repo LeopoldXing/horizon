@@ -1,18 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import {useSearchParams, useRouter} from "next/navigation";
-import {useState} from "react";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useEffect, useState} from "react";
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-} from "@/components/ui/select";
-import {formUrlQuery, formatAmount} from "@/lib/utils";
+import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger,} from "@/components/ui/select";
+import {formatAmount, formUrlQuery} from "@/lib/utils";
 import {UseFormSetValue} from "react-hook-form";
 
 export const BankDropdown = ({accounts = [], setValue, otherStyles}: {
@@ -22,12 +15,11 @@ export const BankDropdown = ({accounts = [], setValue, otherStyles}: {
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [selected, setSeclected] = useState(accounts[0]);
+  const [selected, setSelected] = useState(accounts[0]);
 
   const handleBankChange = (id: string) => {
-    const account = accounts.find((account) => account.appwriteItemId === id)!;
-
-    setSeclected(account);
+    const account = accounts.find((account) => account.id === id)!;
+    setSelected(account);
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
       key: "id",
@@ -52,7 +44,7 @@ export const BankDropdown = ({accounts = [], setValue, otherStyles}: {
               Select a bank to display
             </SelectLabel>
             {accounts.map((account: Account) => (
-                <SelectItem key={account.id} value={account.appwriteItemId} className="cursor-pointer border-t">
+                <SelectItem key={account.id} value={account.id} className="cursor-pointer border-t">
                   <div className="flex flex-col ">
                     <p className="text-[16px] leading-[24px] font-medium">{account.name}</p>
                     <p className="text-[14px] leading-[20px] font-medium text-blue-600">

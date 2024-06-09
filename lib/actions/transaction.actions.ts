@@ -15,7 +15,7 @@ declare type createTransferProps = {
   sourceFundingSourceUrl: string;
   destinationFundingSourceUrl: string;
 }
-export const createTransfer = async (transferData: createTransferProps): Promise<boolean> => {
+export const createTransfer = async (transferData: createTransferProps) => {
   let res = false;
   try {
     if (cookies().has("horizon-token")) {
@@ -29,16 +29,17 @@ export const createTransfer = async (transferData: createTransferProps): Promise
         body: JSON.stringify(transferData),
         cache: "no-cache"
       });
-
+      console.log("transaction.actions -> createTransfer -> response")
+      console.log(response)
       if (response.ok) {
         const responseData = await response.json();
         res = responseData.data;
+        return res;
       }
     }
   } catch (error) {
     console.log(error);
   }
-  return res;
 }
 
 
