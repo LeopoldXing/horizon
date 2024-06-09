@@ -1,6 +1,6 @@
 import React from 'react';
 import HeaderBar from "@/components/customized/layout/HeaderBar";
-import {getAccountById, getAccountList} from "@/lib/actions/bank.actions";
+import {getAccountList} from "@/lib/actions/bank.actions";
 import {getLoggedInUser} from "@/lib/actions/user.actions";
 import TransactionTable from "@/components/customized/TransactionTable";
 import {formatAmount} from "@/lib/utils";
@@ -12,14 +12,11 @@ declare type SearchParamProps = {
 };
 const TransactionHistoryPage = async ({searchParams: {id, page}}: SearchParamProps) => {
   const currentPage = Number(page as string) || 1;
-  const loggedIn = await getLoggedInUser();
+  const loggedInUser = await getLoggedInUser();
   const accounts = await getAccountList();
+  if (!accounts || !loggedInUser) return;
 
-  if (!accounts) return;
-
-  const currentAccountId = (id as string) || accounts[0]?.id;
-
-  const currentAccount = await getAccountById(currentAccountId);
+  const currentAccount = accounts[0];
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil(currentAccount?.transactionList.length / rowsPerPage);
@@ -38,18 +35,18 @@ const TransactionHistoryPage = async ({searchParams: {id, page}}: SearchParamPro
         <div className="space-y-6">
           <div className="px-4 py-5 flex flex-col justify-between gap-4 border-y rounded-lg bg-blue-600 md:flex-row">
             <div className="flex flex-col gap-2">
-              <h2 className="text-18 font-bold text-white">{currentAccount?.data.name}</h2>
+              <h2 className="text-18 font-bold text-white">{currentAccount.name}</h2>
               <p className="text-14 text-blue-25">
-                {currentAccount?.data.officialName}
+                {currentAccount.officialName}
               </p>
               <p className="text-14 font-semibold tracking-[1.1px] text-white">
-                ●●●● ●●●● ●●●● {currentAccount?.data.mask}
+                ●●●● ●●●● ●●●● {currentAccount.mask}
               </p>
             </div>
 
             <div className="px-4 py-2 flex flex-col justify-center items-center gap-2 rounded-md text-white bg-blue-25/20">
               <p className="text-14">Current balance</p>
-              <p className="text-24 text-center font-bold">{formatAmount(currentAccount?.data.currentBalance)}</p>
+              <p className="text-24 text-center font-bold">{formatAmount(currentAccount.currentBalance)}</p>
             </div>
           </div>
 

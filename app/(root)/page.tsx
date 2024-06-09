@@ -1,13 +1,8 @@
 import React from 'react';
 import HeaderBar from "@/components/customized/layout/HeaderBar";
 import RightSideBar from "@/components/customized/layout/RightSideBar";
-import {getLoggedInUser, initializeAccount} from "@/lib/actions/user.actions";
-import {
-  getAccountList,
-  getBankList,
-  getTransactionListByAccountId,
-  getUserBankQuantity, getUserCurrentBalance
-} from "@/lib/actions/bank.actions";
+import {getLoggedInUser} from "@/lib/actions/user.actions";
+import {getAccountList, getUserBankQuantity, getUserCurrentBalance} from "@/lib/actions/bank.actions";
 import TotalBalanceBox from "@/components/customized/TotalBalanceBox";
 import RecentTransactions from "@/components/customized/RecentTransactions";
 
@@ -24,7 +19,10 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
   // get accounts
   const accountList = await getAccountList();
   if (!accountList || !Array.isArray(accountList) || accountList.length == 0) return;
-  const transactionList = await getTransactionListByAccountId(accountList[0].id);
+  const transactionList = accountList[0].transactionList;
+
+  // get current accountId
+  const currentAccountId = accountList[0].id;
 
   // get total bank number
   const totalBankNumber = await getUserBankQuantity();
@@ -45,8 +43,8 @@ const RootPage = async ({searchParams: {id, page}}: SearchParamProps) => {
                              totalCurrentBalance={totalCurrentBalance}/>
           </div>
 
-          <RecentTransactions accountList={accountList} transactionList={transactionList} currentPage={currentPage}
-                              currentAccountId={accountList[0].id}/>
+          <RecentTransactions accountList={accountList} currentPage={currentPage}
+                              currentAccountId={currentAccountId}/>
         </div>
 
         <RightSideBar user={loggedInUser} bankList={accountList?.slice(0, 2)} transactionList={transactionList}/>

@@ -5,19 +5,23 @@ import {AccountItemTab} from "@/components/customized/AccountItemTab";
 import AccountInfo from "@/components/customized/AccountInfo";
 import TransactionTable from "@/components/customized/TransactionTable";
 import {Pagination} from "@/components/customized/Pagination";
+import {getTransactionListByAccountId} from "@/lib/actions/bank.actions";
 
 declare type RecentTransactionsProps = {
   accountList: Array<Account>;
-  transactionList: Array<Transaction>;
   currentPage: number;
   currentAccountId: string;
 }
-const RecentTransactions = ({accountList, transactionList, currentPage = 1, currentAccountId}: RecentTransactionsProps) => {
+const RecentTransactions = async ({accountList, currentPage = 1, currentAccountId}: RecentTransactionsProps) => {
+  console.log("recentTransaction -> currentAccountId", currentAccountId);
+  console.log("recentTransaction -> accountList");
+  console.log(accountList);
+  const transactionList = await getTransactionListByAccountId(currentAccountId);
   const rowsPerPage = 10;
-  const totalPages = Math.ceil(transactionList.length / rowsPerPage);
+  const totalPages = Math.ceil(transactionList?.length / rowsPerPage);
   const indexOfLastTransaction = currentPage * rowsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - rowsPerPage;
-  const currentTransactionList = transactionList.slice(indexOfFirstTransaction, indexOfLastTransaction);
+  const currentTransactionList = transactionList?.slice(indexOfFirstTransaction, indexOfLastTransaction);
 
   return (
       <section className="w-full flex flex-col gap-6">

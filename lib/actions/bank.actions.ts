@@ -186,12 +186,12 @@ export const getTransactionListByAccountId = async (accountId: string) => {
       if (response.ok) {
         const responseData = await response.json();
         res = responseData.data;
+        return JSON.parse(JSON.stringify(res));
       }
     }
   } catch (err) {
     console.error(err);
   }
-  return JSON.parse(JSON.stringify(res));
 }
 
 export const getAccountById = async (accountId: string) => {
