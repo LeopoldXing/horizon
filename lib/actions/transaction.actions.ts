@@ -7,13 +7,10 @@ const BASE_URL = process.env.BASE_URL;
 declare type createTransferProps = {
   name: string;
   amount: string;
-  senderId: string;
-  senderBankId: string;
-  receiverId: string;
-  receiverBankId: string;
-  email: string;
+  senderAccountId: string;
+  receiverAccountShareableId: string;
+  receiverEmail: string;
   sourceFundingSourceUrl: string;
-  destinationFundingSourceUrl: string;
 }
 export const createTransfer = async (transferData: createTransferProps) => {
   let res = false;

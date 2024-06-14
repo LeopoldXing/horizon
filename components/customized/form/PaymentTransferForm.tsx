@@ -41,33 +41,18 @@ const PaymentTransferForm = ({accountList}: { accountList: Array<Account> }) => 
   const submit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
 
-    console.log("paymenttransferform -> onsubmit -> data.senderBank")
-    console.log(data.senderBank)
-
     try {
-      const receiverAccountId = decryptId(data.shareableId);
-      const receiverBank = await getBankByAccountId(receiverAccountId);
-      console.log("paymenttransferform -> onsubmit -> receiverAccountId")
-      console.log(receiverAccountId)
       const senderAccount = await getAccountById(data.senderBank);
-
-      console.log("paymenttransferform -> onsubmit -> senderAccount")
-      console.log(senderAccount)
 
       const transferParams = {
         name: data.name,
         amount: data.amount,
-        senderId: senderAccount.userId.$id,
-        senderBankId: senderAccount.$id,
-        receiverId: receiverBank.userId.$id,
-        receiverBankId: receiverBank.$id,
-        email: data.email,
-        sourceFundingSourceUrl: senderAccount.fundingSourceUrl,
-        destinationFundingSourceUrl: receiverBank.fundingSourceUrl,
+        senderAccountId: senderAccount.id,
+        receiverAccountShareableId: data.shareableId,
+        receiverEmail: data.email,
+        sourceFundingSourceUrl: senderAccount.fundingSourceUrl
       };
 
-      console.log("paymenttransferform -> onsubmit -> transferParams")
-      console.log(transferParams)
       // create transfer
       const res = await createTransfer(transferParams);
 
